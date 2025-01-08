@@ -108,6 +108,7 @@ const Collapsible: React.FC<CollapsibleProps> = observer((props) => {
             textLight={props.light ?? true}
             small
             id={`${props.title}`}
+            fullWidth={true}
             {...props.bodyTextProps}
           >
             {props.children}
