@@ -1,0 +1,11 @@
+@import "~terriajs-variables";
+@import "../../../Sass/common/mixins";
+
+.table-td {
+  background: transparent;
+  width: 100%;
+
+  table {
+    width: 100%;
+  }
+}
