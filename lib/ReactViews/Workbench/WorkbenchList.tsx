@@ -11,7 +11,7 @@ import WorkbenchItem from "./WorkbenchItem";
 import WorkbenchSplitScreen from "./WorkbenchSplitScreen";
 
 const StyledUl = styled(Ul)`
-  margin: 5px 0;
+  padding: 5px 3px;
   li {
     &:first-child {
       margin-top: 0;
@@ -22,6 +22,7 @@ const StyledUl = styled(Ul)`
 interface IProps {
   terria: Terria;
   viewState: ViewState;
+  activeIndex: number;
 }
 
 @observer
@@ -66,13 +67,25 @@ class WorkbenchList extends React.Component<IProps> {
           `}
         >
           {this.props.terria.workbench.items.map((item) => {
-            return (
+            let index = 0;
+            if ((item as any).chartItems?.length > 0) {
+              index = 1;
+            }
+            if (
+              (item as any).chartItems?.length == 0 &&
+              (item as any).mapItems?.length == 0
+            ) {
+              index = 2;
+            }
+            return index === this.props.activeIndex ? (
               <WorkbenchItem
                 item={item}
                 sortData={item}
                 key={item.uniqueId}
                 viewState={this.props.viewState}
               />
+            ) : (
+              ""
             );
           })}
         </Sortable>
