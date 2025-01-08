@@ -34,7 +34,7 @@
       "content": "## Location search\n\nEnter a locality or address to easily locate a point of interest on the map."
     },
     "exploreMapDataButton": {
-      "content": "## Explore map data\n\nBrowse the catalogue of available data and add it to the map here. You can add multiple datasets at any one time, and you’ll see them listed down below in the Workbench."
+      "content": "## Explore data\n\nBrowse the catalogue of available data and add it to the map here. You can add multiple datasets at any one time, and you’ll see them listed down below in the Workbench."
     },
     "sidePanelUploadButton": {
       "content": "## Upload Data\n\nYou can upload your own data to the map to view it with other data sets. Upload a file or link to an existing online data set or data service. Supported data formats include CSV, GeoJSON, KML, GPX and CZML."
@@ -344,7 +344,7 @@
     "welcomeMessageOnMobile": "Interested in data discovery and exploration?",
     "tourBtnText": "Take the tour",
     "helpBtnText": "I'll need some help",
-    "exploreDataBtnText": "Explore map data",
+    "exploreDataBtnText": "Explore data",
     "searchBtnText": "Search for a location",
     "dismissText": "Close message and don't show me this again"
   },
@@ -420,7 +420,7 @@
     "bodyV": "You can apply a range of styles, such as false-colour, to satellite imagery by clicking on the styles dropdown in your data workbench."
   },
   "addData": {
-    "addDataBtnText": "Explore map data",
+    "addDataBtnText": "Explore data",
     "btnHide": "Hide",
     "load": "Load local/web data",
     "closeDataPanel": "Close data panel",
@@ -546,7 +546,12 @@
     "addItemErrorMessage": "An error occurred while loading the catalog item.",
     "searchItem": "Search",
     "searchItemTitle": "Search",
-    "splitScreenMode": "SPLIT SCREEN MODE"
+    "splitScreenMode": "SPLIT SCREEN MODE",
+    "tabs": {
+      "mapHeading": "Map",
+      "chartHeading": "Chart",
+      "tableHeading": "Table"
+    }
   },
   "dateTime": {
     "selectorLabel": "Time:",
@@ -612,7 +617,7 @@
   "emptyWorkbench": {
     "emptyArea": "Your workbench is empty",
     "helpfulHints": "Helpful hints",
-    "helpfulHintsOne": "Browse available data by selecting ‘Explore map data’ or click ‘Upload’ to add your own data to the map.",
+    "helpfulHintsOne": "Browse available data by selecting ‘Explore data’ or click ‘Upload’ to add your own data to the map.",
     "helpfulHintsTwo": "Once you’ve added data to the map, your active data sets are listed here in your workbench. The workbench will help you to interact with the data.",
     "helpfulHintsThree": "In the workbench you can toggle data sets on and off, change their opacity, activate the split screen comparison, change styles, and navigate through dates and times, if the data supports this functionality."
   },
@@ -2171,9 +2176,9 @@
     "invalid": "Invalid"
   },
   "relatedMaps": {
-    "buttonText": "Related Maps",
-    "buttonTitle": "See related maps",
-    "panelHeading": "Related Maps",
+    "buttonText": "Related Sites",
+    "buttonTitle": "See related sites",
+    "panelHeading": "Related Sites",
     "panelText": "Clicking on a map below will open it in a separate window or tab."
   }
 }

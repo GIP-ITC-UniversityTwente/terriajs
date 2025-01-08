@@ -560,7 +560,12 @@
     "addItemErrorMessage": "Ocorreu um erro ao carregar o item do catálogo.",
     "searchItem": "Procurar",
     "searchItemTitle": "Procurar",
-    "splitScreenMode": "MODO DE TELA DIVIDIDA"
+    "splitScreenMode": "MODO DE TELA DIVIDIDA",
+    "tabs": {
+      "mapHeading": "Mapa",
+      "chartHeading": "Gráfico",
+      "tableHeading": "Mesa"
+    }
   },
   "dateTime": {
     "useTimeline": "Use a linha do tempo",
