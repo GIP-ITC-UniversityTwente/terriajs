@@ -167,186 +167,190 @@ export const WelcomeMessagePure = (props) => {
           fullHeight
           centered
         >
-          <VideoGuide
-            viewState={viewState}
-            videoLink={
-              viewState.terria.configParameters.welcomeMessageVideo.videoUrl
-            }
-            background={
-              viewState.terria.configParameters.welcomeMessageVideo
-                .placeholderImage
-            }
-            videoName={WELCOME_MESSAGE_VIDEO}
-          />
-          <SlideUpFadeIn isVisible={welcomeVisible}>
-            <Box
-              styledWidth={"667px"}
-              styledMinHeight={"504px"}
-              displayInlineBlock
-              paddedRatio={viewState.useSmallScreenInterface ? 2 : 6}
-              onClick={(e) => {
-                viewState.setTopElement("WelcomeMessage");
-                e.stopPropagation();
-              }}
-            >
-              <RawButton
-                onClick={handleClose.bind(null, false)}
-                css={`
-                  float: right;
-                `}
-              >
-                <StyledIcon
-                  styledWidth={"24px"}
-                  light
-                  glyph={Icon.GLYPHS.closeLight}
-                />
-              </RawButton>
-              <Spacing bottom={7} />
+          <Box backgroundColor={"#0000004f"}>
+            <VideoGuide
+              viewState={viewState}
+              videoLink={
+                viewState.terria.configParameters.welcomeMessageVideo.videoUrl
+              }
+              background={
+                viewState.terria.configParameters.welcomeMessageVideo
+                  .placeholderImage
+              }
+              videoName={WELCOME_MESSAGE_VIDEO}
+            />
+            <SlideUpFadeIn isVisible={welcomeVisible}>
               <Box
+                styledWidth={"667px"}
+                styledMinHeight={"504px"}
                 displayInlineBlock
-                styledWidth={
-                  viewState.useSmallScreenInterface ? "100%" : "83.33333%"
-                }
+                paddedRatio={viewState.useSmallScreenInterface ? 2 : 6}
+                onClick={(e) => {
+                  viewState.setTopElement("WelcomeMessage");
+                  e.stopPropagation();
+                }}
               >
-                <Text
-                  bold
-                  textLight
-                  styledFontSize={
-                    viewState.useSmallScreenInterface ? "26px" : "36px"
+                <RawButton
+                  onClick={handleClose.bind(null, false)}
+                  css={`
+                    float: right;
+                  `}
+                >
+                  <StyledIcon
+                    styledWidth={"24px"}
+                    light
+                    glyph={Icon.GLYPHS.closeLight}
+                  />
+                </RawButton>
+                <Spacing bottom={7} />
+                <Box
+                  displayInlineBlock
+                  styledWidth={
+                    viewState.useSmallScreenInterface ? "100%" : "83.33333%"
                   }
-                  textAlignCenter={viewState.useSmallScreenInterface}
-                  styledLineHeight={"49px"}
                 >
-                  {t("welcomeMessage.title")}
-                </Text>
-                <Spacing bottom={3} />
-                <Text
-                  textLight
-                  medium
-                  textAlignCenter={viewState.useSmallScreenInterface}
-                >
-                  {viewState.useSmallScreenInterface === false && (
-                    <Trans i18nKey="welcomeMessage.welcomeMessage">
-                      Interested in data discovery and exploration?
-                      <br />
-                      Dive right in and get started or check the following help
-                      guide options.
-                    </Trans>
-                  )}
-                  {viewState.useSmallScreenInterface === true && (
-                    <Trans i18nKey="welcomeMessage.welcomeMessageOnMobile">
-                      Interested in data discovery and exploration?
-                    </Trans>
-                  )}
-                </Text>
-              </Box>
-              <Spacing bottom={6} />
-              {!viewState.useSmallScreenInterface && (
-                <>
-                  <Text bold textLight extraLarge>
-                    {
-                      viewState.terria.configParameters.welcomeMessageVideo
-                        .videoTitle
+                  <Text
+                    bold
+                    textLight
+                    styledFontSize={
+                      viewState.useSmallScreenInterface ? "26px" : "36px"
                     }
+                    textAlignCenter={viewState.useSmallScreenInterface}
+                    styledLineHeight={"49px"}
+                  >
+                    {t("welcomeMessage.title")}
                   </Text>
-                  <Spacing bottom={2} />
-                </>
-              )}
-              <Box fullWidth styledMinHeight={"160px"}>
+                  <Spacing bottom={3} />
+                  <Text
+                    textLight
+                    medium
+                    textAlignCenter={viewState.useSmallScreenInterface}
+                  >
+                    {viewState.useSmallScreenInterface === false && (
+                      <Trans i18nKey="welcomeMessage.welcomeMessage">
+                        Interested in data discovery and exploration?
+                        <br />
+                        Dive right in and get started or check the following
+                        help guide options.
+                      </Trans>
+                    )}
+                    {viewState.useSmallScreenInterface === true && (
+                      <Trans i18nKey="welcomeMessage.welcomeMessageOnMobile">
+                        Interested in data discovery and exploration?
+                      </Trans>
+                    )}
+                  </Text>
+                </Box>
+                <Spacing bottom={6} />
                 {!viewState.useSmallScreenInterface && (
                   <>
-                    <Box
-                      col6
-                      centered
-                      backgroundImage={
+                    <Text bold textLight extraLarge>
+                      {
                         viewState.terria.configParameters.welcomeMessageVideo
-                          .placeholderImage
+                          .videoTitle
                       }
-                      backgroundBlackOverlay={0.5}
-                    >
-                      <RawButton
-                        fullWidth
-                        fullHeight
-                        onClick={() =>
-                          viewState.setVideoGuideVisible(WELCOME_MESSAGE_VIDEO)
-                        }
-                      >
-                        <StyledIcon
-                          styledWidth={"48px"}
-                          light
-                          glyph={Icon.GLYPHS.playInverted}
-                          css={`
-                            margin: auto;
-                          `}
-                        />
-                      </RawButton>
-                    </Box>
-                    <Spacing right={5} />
+                    </Text>
+                    <Spacing bottom={2} />
                   </>
                 )}
-                <Box styledMargin={"0 auto"} displayInlineBlock>
+                <Box fullWidth styledMinHeight={"160px"}>
                   {!viewState.useSmallScreenInterface && (
                     <>
-                      <WelcomeMessageButton
-                        onClick={() => {
-                          handleClose(false);
-                          // not sure if we should wait for the exit animation,
-                          // if we don't, we have a flicker due to the difference
-                          // in overlay darkness - but if we wait, it goes
-                          // dark -> light -> dark anyway..
-                          setShouldTakeTour(true);
-                          viewState.setTourIndex(0);
-                          viewState.setShowTour(true);
-                          viewState.setTopElement(TourPortalDisplayName);
-                        }}
-                        buttonText={t("welcomeMessage.tourBtnText")}
-                        buttonIcon={Icon.GLYPHS.tour}
-                      />
-                      <Spacing bottom={4} />
-                      <WelcomeMessageButton
-                        buttonText={t("welcomeMessage.helpBtnText")}
-                        buttonIcon={Icon.GLYPHS.newHelp}
-                        onClick={() => {
-                          handleClose(false);
-                          setShouldOpenHelp(true);
-                        }}
-                      />
+                      <Box
+                        col6
+                        centered
+                        backgroundImage={
+                          viewState.terria.configParameters.welcomeMessageVideo
+                            .placeholderImage
+                        }
+                        backgroundBlackOverlay={0.5}
+                      >
+                        <RawButton
+                          fullWidth
+                          fullHeight
+                          onClick={() =>
+                            viewState.setVideoGuideVisible(
+                              WELCOME_MESSAGE_VIDEO
+                            )
+                          }
+                        >
+                          <StyledIcon
+                            styledWidth={"48px"}
+                            light
+                            glyph={Icon.GLYPHS.playInverted}
+                            css={`
+                              margin: auto;
+                            `}
+                          />
+                        </RawButton>
+                      </Box>
+                      <Spacing right={5} />
                     </>
                   )}
-                  <Spacing bottom={4} />
-                  <WelcomeMessageButton
-                    buttonText={t("welcomeMessage.exploreDataBtnText")}
-                    buttonIcon={Icon.GLYPHS.add}
-                    onClick={() => {
-                      handleClose(false);
-                      setShouldExploreData(true);
-                    }}
-                  />
-                  {viewState.useSmallScreenInterface && (
-                    <>
-                      <Spacing bottom={4} />
-                      <WelcomeMessageButton
-                        buttonText={t("welcomeMessage.searchBtnText")}
-                        buttonIcon={Icon.GLYPHS.search}
-                        onClick={() => {
-                          handleClose(false);
-                          setShouldOpenSearch(true);
-                        }}
-                      />
-                    </>
-                  )}
+                  <Box styledMargin={"0 auto"} displayInlineBlock>
+                    {!viewState.useSmallScreenInterface && (
+                      <>
+                        <WelcomeMessageButton
+                          onClick={() => {
+                            handleClose(false);
+                            // not sure if we should wait for the exit animation,
+                            // if we don't, we have a flicker due to the difference
+                            // in overlay darkness - but if we wait, it goes
+                            // dark -> light -> dark anyway..
+                            setShouldTakeTour(true);
+                            viewState.setTourIndex(0);
+                            viewState.setShowTour(true);
+                            viewState.setTopElement(TourPortalDisplayName);
+                          }}
+                          buttonText={t("welcomeMessage.tourBtnText")}
+                          buttonIcon={Icon.GLYPHS.tour}
+                        />
+                        <Spacing bottom={4} />
+                        <WelcomeMessageButton
+                          buttonText={t("welcomeMessage.helpBtnText")}
+                          buttonIcon={Icon.GLYPHS.newHelp}
+                          onClick={() => {
+                            handleClose(false);
+                            setShouldOpenHelp(true);
+                          }}
+                        />
+                      </>
+                    )}
+                    <Spacing bottom={4} />
+                    <WelcomeMessageButton
+                      buttonText={t("welcomeMessage.exploreDataBtnText")}
+                      buttonIcon={Icon.GLYPHS.add}
+                      onClick={() => {
+                        handleClose(false);
+                        setShouldExploreData(true);
+                      }}
+                    />
+                    {viewState.useSmallScreenInterface && (
+                      <>
+                        <Spacing bottom={4} />
+                        <WelcomeMessageButton
+                          buttonText={t("welcomeMessage.searchBtnText")}
+                          buttonIcon={Icon.GLYPHS.search}
+                          onClick={() => {
+                            handleClose(false);
+                            setShouldOpenSearch(true);
+                          }}
+                        />
+                      </>
+                    )}
+                  </Box>
+                </Box>
+                {!viewState.useSmallScreenInterface && <Spacing bottom={13} />}
+                <Box fullWidth centered>
+                  <RawButton onClick={handleClose.bind(null, true)}>
+                    <TextSpan textLight isLink>
+                      {t("welcomeMessage.dismissText")}
+                    </TextSpan>
+                  </RawButton>
                 </Box>
               </Box>
-              {!viewState.useSmallScreenInterface && <Spacing bottom={13} />}
-              <Box fullWidth centered>
-                <RawButton onClick={handleClose.bind(null, true)}>
-                  <TextSpan textLight isLink>
-                    {t("welcomeMessage.dismissText")}
-                  </TextSpan>
-                </RawButton>
-              </Box>
-            </Box>
-          </SlideUpFadeIn>
+            </SlideUpFadeIn>
+          </Box>
         </Box>
       </WelcomeModalWrapper>
     </FadeIn>
