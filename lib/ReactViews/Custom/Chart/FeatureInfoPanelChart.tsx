@@ -1,20 +1,25 @@
 import { AxisBottom, AxisLeft } from "@visx/axis";
 import { Group } from "@visx/group";
 import { useParentSize } from "@visx/responsive";
-import { scaleLinear, scaleTime } from "@visx/scale";
+import { scaleBand, scaleLinear, scaleTime } from "@visx/scale";
 import { computed, makeObservable } from "mobx";
 import { observer } from "mobx-react";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
-import ChartableMixin, { ChartItem } from "../../../ModelMixins/ChartableMixin";
+import ChartableMixin, {
+  ChartItem,
+  ChartItemType
+} from "../../../ModelMixins/ChartableMixin";
 import MappableMixin from "../../../ModelMixins/MappableMixin";
+import BarChart from "./BarChart";
 import LineChart from "./LineChart";
 import Styles from "./chart-preview.scss";
 
 type CatalogItemType = ChartableMixin.Instance;
 
 type FeatureInfoPanelChartPropTypes = {
+  chartType?: string;
   item: CatalogItemType;
   width?: number;
   height?: number;
@@ -22,6 +27,7 @@ type FeatureInfoPanelChartPropTypes = {
   yColumn?: string;
   margin?: Margin;
   baseColor?: string;
+  catalogItem: any;
 };
 
 interface Margin {
@@ -43,7 +49,7 @@ const FeatureInfoPanelChart: React.FC<FeatureInfoPanelChartPropTypes> =
 
     const parentSize = useParentSize();
     const width = props.width || Math.max(parentSize.width, 300) || 0;
-    const height = props.height || Math.max(parentSize.height, 200) || 0;
+    const height = props.height || Math.max(parentSize.height, 300) || 0;
 
     const catalogItem = props.item;
 
@@ -52,7 +58,7 @@ const FeatureInfoPanelChart: React.FC<FeatureInfoPanelChartPropTypes> =
     let chartItem = props.yColumn
       ? catalogItem.chartItems.find((it) => it.id === props.yColumn)
       : catalogItem.chartItems.find(isLineType);
-    chartItem = chartItem && isLineType(chartItem) ? chartItem : undefined;
+    // chartItem = chartItem && isLineType(chartItem) ? chartItem : undefined;
 
     const notChartable = !ChartableMixin.isMixedInto(catalogItem);
     const isLoading =
@@ -96,12 +102,14 @@ const FeatureInfoPanelChart: React.FC<FeatureInfoPanelChartPropTypes> =
         )}
         {canShowChart && chartItem && (
           <Chart
+            chartType={props.chartType}
             width={width}
             height={height}
             margin={margin}
             chartItem={chartItem}
             baseColor={baseColor}
             xAxisLabel={props.xAxisLabel}
+            catalogItem={props.catalogItem}
           />
         )}
       </div>
@@ -118,6 +126,8 @@ interface ChartPropsType {
   chartItem: ChartItem;
   baseColor: string;
   xAxisLabel?: string;
+  chartType?: string;
+  catalogItem?: any;
 }
 
 /**
@@ -143,32 +153,74 @@ class Chart extends React.Component<ChartPropsType> {
   }
 
   @computed
-  get scales() {
+  get xScale() {
     const chartItem = this.props.chartItem;
-    const xScaleParams = {
-      domain: chartItem.domain.x,
-      range: [this.props.margin.left + this.yAxisWidth, this.plot.width]
-    };
+    const xAxis = chartItem.xAxis;
+    const domain = chartItem.domain.x;
+    if (xAxis.scale === "linear") {
+      return scaleLinear({
+        domain: [
+          parseInt(domain[0].toString()),
+          parseInt(domain[1].toString())
+        ],
+        range: [0, this.plot.width]
+      }).nice();
+    }
+    if (xAxis.scale === "band") {
+      return scaleBand({
+        domain: domain,
+        range: [0, this.plot.width]
+      });
+    } else
+      return scaleTime({
+        domain: [
+          parseInt(domain[0].toString()),
+          parseInt(domain[1].toString())
+        ],
+        range: [0, this.plot.width]
+      }).nice();
+  }
+
+  @computed
+  get yScale() {
+    const chartItem = this.props.chartItem;
     const yScaleParams = {
       domain: chartItem.domain.y,
       range: [this.plot.height, 0]
     };
+    return scaleLinear(yScaleParams);
+  }
+
+  @computed
+  get scales() {
     return {
-      x:
-        chartItem.xAxis.scale === "linear"
-          ? scaleLinear(xScaleParams)
-          : scaleTime(xScaleParams),
-      y: scaleLinear(yScaleParams)
+      x: this.xScale,
+      y: this.yScale
     };
   }
 
   render() {
-    const { width, height, margin, chartItem, baseColor } = this.props;
+    const {
+      width,
+      height,
+      margin,
+      chartItem,
+      baseColor,
+      chartType,
+      catalogItem
+    } = this.props;
 
     // Make sure points are asc sorted by x value
-    chartItem.points = chartItem.points.sort(
-      (a, b) => this.scales.x(a.x) - this.scales.x(b.x)
-    );
+    //
+
+    let chartOptions;
+    let customProperties = catalogItem.customProperties;
+    if (customProperties?.charts) {
+      chartOptions = customProperties.charts[0];
+      chartItem.chartOptions = chartOptions;
+    }
+
+    chartItem.type = (chartType as ChartItemType) ?? chartItem.type;
 
     const id = `featureInfoPanelChart-${chartItem.name}`;
     const textStyle = {
@@ -191,11 +243,8 @@ class Chart extends React.Component<ChartPropsType> {
       <svg width={width} height={height}>
         <Group top={margin.top} left={margin.left}>
           <AxisBottom
-            top={this.plot.height}
-            // .nice() rounds the scale so that the aprox beginning and
-            // aprox end labels are shown
-            // See: https://stackoverflow.com/questions/21753126/d3-js-starting-and-ending-tick
-            scale={this.scales.x.nice()}
+            top={this.plot.height + 1}
+            scale={this.xScale}
             numTicks={4}
             stroke="#a0a0a0"
             tickStroke="#a0a0a0"
@@ -227,15 +276,60 @@ class Chart extends React.Component<ChartPropsType> {
               dy: "0"
             })}
           />
-          <LineChart
+          <Plot
             id={id}
             chartItem={chartItem}
+            baseColor={baseColor}
             scales={this.scales}
-            color={baseColor}
+            width={this.plot.width}
+            height={this.plot.height}
           />
         </Group>
       </svg>
     );
+  }
+}
+
+interface PlotPropsType {
+  id: string;
+  width?: number;
+  height?: number;
+  chartItem: any;
+  baseColor?: string;
+  scales: any;
+}
+
+@observer
+class Plot extends React.Component<PlotPropsType> {
+  constructor(props: PlotPropsType) {
+    super(props);
+  }
+
+  render() {
+    const { id, chartItem, scales, width, height, baseColor } = this.props;
+
+    switch (chartItem.type) {
+      case "line":
+        return (
+          <LineChart
+            id={id}
+            chartItem={chartItem}
+            scales={scales}
+            color={baseColor}
+          />
+        );
+      case "bar":
+        return (
+          <BarChart
+            id={id}
+            chartItem={chartItem}
+            scales={scales}
+            color={baseColor}
+            width={width}
+            height={height}
+          />
+        );
+    }
   }
 }
 

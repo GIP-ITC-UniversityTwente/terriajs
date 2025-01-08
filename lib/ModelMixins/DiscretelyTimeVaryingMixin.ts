@@ -366,7 +366,7 @@ function DiscretelyTimeVaryingMixin<
         glyphStyle: this.chartGlyphStyle,
         xAxis: { name: "Time", scale: "time" },
         points,
-        domain: { ...calculateDomain(points), y: [0, 1] },
+        domain: { ...calculateDomain(points, "time"), y: [0, 1] },
         showInChartPanel: this.show && this.showInChartPanel,
         isSelectedInWorkbench: this.showInChartPanel,
         updateIsSelectedInWorkbench: (isSelected: boolean) => {

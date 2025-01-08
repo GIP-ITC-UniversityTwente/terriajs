@@ -6,13 +6,14 @@ import { localPoint } from "@visx/event";
 import { GridRows } from "@visx/grid";
 import { Group } from "@visx/group";
 import { withParentSize } from "@visx/responsive";
-import { scaleLinear, scaleTime } from "@visx/scale";
+import { scaleLinear, scaleTime, scaleBand } from "@visx/scale";
 import { Line } from "@visx/shape";
 import PropTypes from "prop-types";
 import React from "react";
 import groupBy from "lodash-es/groupBy";
 import minBy from "lodash-es/minBy";
 import Legends from "./Legends";
+import BarChart from "./BarChart";
 import LineChart from "./LineChart";
 import MomentLinesChart from "./MomentLinesChart";
 import MomentPointsChart from "./MomentPointsChart";
@@ -65,7 +66,8 @@ class Chart extends React.Component {
     height: PropTypes.number,
     chartItems: PropTypes.array.isRequired,
     xAxis: PropTypes.object.isRequired,
-    margin: PropTypes.object
+    margin: PropTypes.object,
+    catalogItem: PropTypes.object
   };
 
   static defaultProps = {
@@ -278,8 +280,10 @@ class Chart extends React.Component {
               />
               <XAxis
                 top={this.plotHeight + 1}
-                scale={this.xScale}
-                label={xAxis.units || (xAxis.scale === "time" && "Date")}
+                scale={
+                  xAxis.scale === "band" ? this.xScale : this.xScale.nice()
+                }
+                label={xAxis.units || (xAxis.scale === "time" ? "Date" : "")}
               />
               {this.yAxes.map((y, i) => (
                 <YAxis
@@ -304,6 +308,7 @@ class Chart extends React.Component {
                 id="zoomSurface"
                 clipPath="url(#plotClip)"
                 pointerEvents="all"
+                width={this.plotWidth}
               >
                 <rect
                   width={this.plotWidth}
@@ -317,6 +322,8 @@ class Chart extends React.Component {
                   chartItems={this.chartItems}
                   initialScales={this.initialScales}
                   zoomedScales={this.zoomedScales}
+                  width={this.plotWidth}
+                  height={this.plotHeight}
                 />
               </svg>
             </Group>
@@ -334,7 +341,9 @@ class Plot extends React.Component {
   static propTypes = {
     chartItems: PropTypes.array.isRequired,
     initialScales: PropTypes.array.isRequired,
-    zoomedScales: PropTypes.array.isRequired
+    zoomedScales: PropTypes.array.isRequired,
+    width: PropTypes.number,
+    height: PropTypes.number
   };
 
   constructor(props) {
@@ -356,9 +365,29 @@ class Plot extends React.Component {
   }
 
   render() {
-    const { chartItems, initialScales } = this.props;
+    const { chartItems, initialScales, width, height } = this.props;
     return chartItems.map((chartItem, i) => {
+      let customProperties = chartItem.item.customProperties;
+      let colors;
+      if (customProperties?.charts) {
+        chartItem.chartOptions = customProperties.charts[i];
+        chartItem.type = customProperties.charts[i]?.type;
+        chartItem.key += "-" + i;
+        colors = chartItem.chartOptions?.xAxis?.colors;
+      }
       switch (chartItem.type) {
+        case "bar":
+          return (
+            <BarChart
+              key={chartItem.key}
+              ref={this.chartRefs[i]}
+              id={sanitizeIdString(chartItem.key)}
+              chartItem={chartItem}
+              scales={initialScales[i]}
+              width={width}
+              height={height}
+            />
+          );
         case "line":
           return (
             <LineChart
@@ -367,6 +396,9 @@ class Plot extends React.Component {
               id={sanitizeIdString(chartItem.key)}
               chartItem={chartItem}
               scales={initialScales[i]}
+              color={colors ? colors[i] : undefined}
+              width={width}
+              height={height}
             />
           );
         case "momentPoints": {
@@ -446,7 +478,8 @@ class XAxis extends React.PureComponent {
         // .nice() rounds the scale so that the aprox beginning and
         // aprox end labels are shown
         // See: https://stackoverflow.com/questions/21753126/d3-js-starting-and-ending-tick
-        scale={scale.nice()}
+        scale={scale}
+        numTicks={5}
         {...restProps}
       />
     );
@@ -518,13 +551,17 @@ function PointsOnMap({ chartItems, terria }) {
 /**
  * Calculates a combined domain of all chartItems.
  */
-function calculateDomain(chartItems) {
-  const xmin = Math.min(...chartItems.map((c) => c.domain.x[0]));
-  const xmax = Math.max(...chartItems.map((c) => c.domain.x[1]));
+function calculateDomain(chartItems, scale) {
   const ymin = Math.min(...chartItems.map((c) => c.domain.y[0]));
   const ymax = Math.max(...chartItems.map((c) => c.domain.y[1]));
   return {
-    x: [xmin, xmax],
+    x:
+      scale == "band"
+        ? chartItems[0].domain.x
+        : [
+            Math.min(...chartItems.map((c) => c.domain.x[0])),
+            Math.max(...chartItems.map((c) => c.domain.x[1]))
+          ],
     y: [ymin, ymax]
   };
 }

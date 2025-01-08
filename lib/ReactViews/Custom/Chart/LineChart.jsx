@@ -10,7 +10,9 @@ class LineChart extends React.PureComponent {
     id: PropTypes.string.isRequired,
     chartItem: PropTypes.object.isRequired,
     scales: PropTypes.object.isRequired,
-    color: PropTypes.string
+    color: PropTypes.string,
+    width: PropTypes.number,
+    height: PropTypes.number
   };
 
   doZoom(scales) {
@@ -24,11 +26,12 @@ class LineChart extends React.PureComponent {
   }
 
   render() {
-    const { chartItem, scales, color } = this.props;
+    const { chartItem, width, scales, color } = this.props;
     const stroke = color || chartItem.getColor();
     return (
-      <g id={this.props.id}>
+      <g id={this.props.id} width={width}>
         <LinePath
+          width={width}
           data={chartItem.points}
           x={(p) => scales.x(p.x)}
           y={(p) => scales.y(p.y)}

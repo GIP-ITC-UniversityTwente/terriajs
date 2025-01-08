@@ -370,14 +370,19 @@ function TableMixin<T extends AbstractConstructor<BaseType>>(Base: T) {
         return [];
       }
 
-      const xValues: readonly (Date | number | null)[] =
+      const xValues: readonly (Date | number | string | null)[] =
         xColumn.type === TableColumnType.time
           ? xColumn.valuesAsDates.values
-          : xColumn.valuesAsNumbers.values;
+          : xColumn.values;
 
       const xAxis: ChartAxis = {
         name: xColumn.title || xColumn.name,
-        scale: xColumn.type === TableColumnType.time ? "time" : "linear",
+        scale:
+          xColumn.type === TableColumnType.time
+            ? "time"
+            : xColumn.type == TableColumnType.scalar
+            ? "linear"
+            : "band",
         units: xColumn.units
       };
 
@@ -400,7 +405,7 @@ function TableMixin<T extends AbstractConstructor<BaseType>>(Base: T) {
             points.push({ x, y });
           }
 
-          if (points.length <= 1) return;
+          if (points.length == 0) return;
 
           const colorId = `color-${this.uniqueId}-${this.name}-${yColumn.name}`;
 
@@ -415,7 +420,7 @@ function TableMixin<T extends AbstractConstructor<BaseType>>(Base: T) {
             glyphStyle: this.chartGlyphStyle ?? "circle",
             xAxis,
             points,
-            domain: calculateDomain(points),
+            domain: calculateDomain(points, xAxis.scale),
             isSelectedInWorkbench: line.isSelectedInWorkbench,
             showInChartPanel: this.show && line.isSelectedInWorkbench,
             updateIsSelectedInWorkbench: (isSelected: boolean) => {

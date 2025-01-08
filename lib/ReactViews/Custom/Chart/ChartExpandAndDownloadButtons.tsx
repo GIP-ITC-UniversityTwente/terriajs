@@ -24,6 +24,7 @@ interface PropsType extends WithTranslation {
   downloadNames?: string[];
   raiseToTitle: boolean;
   t: TFunction;
+  catalogItem?: any;
 }
 
 @observer
@@ -65,8 +66,18 @@ class ChartExpandAndDownloadButtons extends React.Component<PropsType> {
       // We want to show only one source item at a time, so remove any
       // existing source items from the workbench
       sourceItems.forEach((sourceItem) => {
-        workbench.items.forEach((workbenchItem) => {
+        workbench.items.forEach((workbenchItem: any) => {
           if (sourceItem.uniqueId === workbenchItem.uniqueId) {
+            workbench.remove(workbenchItem);
+          }
+
+          if (
+            itemToExpand?.type === "csv" &&
+            workbenchItem?.type === "csv" &&
+            itemToExpand.uniqueId?.split(":")[0] ===
+              workbenchItem.uniqueId?.split(":")[0] &&
+            (itemToExpand as any).name === workbenchItem.name
+          ) {
             workbench.remove(workbenchItem);
           }
         });
