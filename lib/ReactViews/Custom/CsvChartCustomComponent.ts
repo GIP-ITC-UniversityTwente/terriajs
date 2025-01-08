@@ -32,7 +32,7 @@ interface CsvChartCustomComponentAttributes
 }
 
 // Any chart type not listed here won't work, because FeatureInfoPanelChart only draws line charts.
-const SUPPORTED_CHART_TYPES = ["line", "lineAndPoint"];
+const SUPPORTED_CHART_TYPES = ["bar", "line", "lineAndPoint"];
 
 export default class CsvChartCustomComponent extends ChartCustomComponent<CsvCatalogItem> {
   get name(): string {
