@@ -242,52 +242,78 @@ export const WelcomeMessagePure = (props) => {
                   </Text>
                 </Box>
                 <Spacing bottom={6} />
-                {!viewState.useSmallScreenInterface && (
-                  <>
-                    <Text bold textLight extraLarge>
-                      {
-                        viewState.terria.configParameters.welcomeMessageVideo
-                          .videoTitle
-                      }
-                    </Text>
-                    <Spacing bottom={2} />
-                  </>
-                )}
-                <Box fullWidth styledMinHeight={"160px"}>
-                  {!viewState.useSmallScreenInterface && (
+                {viewState.terria.configParameters.welcomeMessageVideo
+                  .videoUrl &&
+                  !viewState.useSmallScreenInterface && (
                     <>
-                      <Box
-                        col6
-                        centered
-                        backgroundImage={
+                      <Text bold textLight extraLarge>
+                        {
                           viewState.terria.configParameters.welcomeMessageVideo
-                            .placeholderImage
+                            .videoTitle
                         }
-                        backgroundBlackOverlay={0.5}
-                      >
-                        <RawButton
-                          fullWidth
-                          fullHeight
-                          onClick={() =>
-                            viewState.setVideoGuideVisible(
-                              WELCOME_MESSAGE_VIDEO
-                            )
-                          }
-                        >
-                          <StyledIcon
-                            styledWidth={"48px"}
-                            light
-                            glyph={Icon.GLYPHS.playInverted}
-                            css={`
-                              margin: auto;
-                            `}
-                          />
-                        </RawButton>
-                      </Box>
-                      <Spacing right={5} />
+                      </Text>
+                      <Spacing bottom={2} />
                     </>
                   )}
-                  <Box styledMargin={"0 auto"} displayInlineBlock>
+                <Box
+                  fullWidth
+                  styledMinHeight={
+                    viewState.terria.configParameters.welcomeMessageVideo
+                      .videoUrl
+                      ? "160px"
+                      : "40px"
+                  }
+                >
+                  {viewState.terria.configParameters.welcomeMessageVideo
+                    .videoUrl &&
+                    !viewState.useSmallScreenInterface && (
+                      <>
+                        <Box
+                          col6
+                          centered
+                          backgroundImage={
+                            viewState.terria.configParameters
+                              .welcomeMessageVideo.placeholderImage
+                          }
+                          backgroundBlackOverlay={0.5}
+                        >
+                          <RawButton
+                            fullWidth
+                            fullHeight
+                            onClick={() =>
+                              viewState.setVideoGuideVisible(
+                                WELCOME_MESSAGE_VIDEO
+                              )
+                            }
+                          >
+                            <StyledIcon
+                              styledWidth={"48px"}
+                              light
+                              glyph={Icon.GLYPHS.playInverted}
+                              css={`
+                                margin: auto;
+                              `}
+                            />
+                          </RawButton>
+                        </Box>
+                        <Spacing right={5} />
+                      </>
+                    )}
+                  <Box
+                    styledMargin={"0 auto"}
+                    displayInlineBlock={
+                      viewState.terria.configParameters.welcomeMessageVideo
+                        .videoUrl
+                        ? true
+                        : false
+                    }
+                    gap={
+                      viewState.terria.configParameters.welcomeMessageVideo
+                        .videoUrl
+                        ? 0
+                        : 2
+                    }
+                  >
                     {!viewState.useSmallScreenInterface && (
                       <>
                         <WelcomeMessageButton
