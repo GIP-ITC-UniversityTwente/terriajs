@@ -339,9 +339,9 @@
     "showCuratedData": "Show Curated Data"
   },
   "welcomeMessage": {
-    "title": "Let's get you started",
-    "welcomeMessage": "Interested in data discovery and exploration?<br/>Dive right in and get started or check the following help guide options.",
-    "welcomeMessageOnMobile": "Interested in data discovery and exploration?",
+    "title": "Mozambique Crop Statistics",
+    "welcomeMessage": "The MAFRA project aims to develop and realize a robust system for agricultural production statistics in Mozambique. The foreseen eventual user is the Ministry of Agriculture and Rural Development (MADER). At present, our second-year pilot involves three provinces: Gaza, Manica and Zambezia. In these days, fieldwork is conducted in the province of Manica, the first we are addressing. Originally, we were scheduled to start in the more southern Gaza province but floods there prevented work to be carried out. Because of ongoing fieldwork we are happy to see the data come in and follow progress. The project is a collaboration between IFPRI (Washington, DC), UT/ITC (GIP, NRS), Universidade Eduardo Mondlane (Maputo, Mozambique) and Seoul National University (South Korea). Funding comes from South Korea's Ministry of Agriculture, Food and Rural Affairs (MAFRA).",
+    "welcomeMessageOnMobile": "The MAFRA project aims to develop and realize a robust system for agricultural production statistics in Mozambique. The foreseen eventual user is the Ministry of Agriculture and Rural Development (MADER). At present, our second-year pilot involves three provinces: Gaza, Manica and Zambezia. In these days, fieldwork is conducted in the province of Manica, the first we are addressing. Originally, we were scheduled to start in the more southern Gaza province but floods there prevented work to be carried out. Because of ongoing fieldwork we are happy to see the data come in and follow progress",
     "tourBtnText": "Take the tour",
     "helpBtnText": "I'll need some help",
     "exploreDataBtnText": "Explore data",
