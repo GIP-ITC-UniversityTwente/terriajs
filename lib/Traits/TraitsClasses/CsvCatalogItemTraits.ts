@@ -1,5 +1,8 @@
+import anyTrait from "../Decorators/anyTrait";
 import objectTrait from "../Decorators/objectTrait";
+import objectArrayTrait from "../Decorators/objectArrayTrait";
 import primitiveTrait from "../Decorators/primitiveTrait";
+import primitiveArrayTrait from "../Decorators/primitiveArrayTrait";
 import mixTraits from "../mixTraits";
 import ModelTraits from "../ModelTraits";
 import { traitClass } from "../Trait";
@@ -30,6 +33,74 @@ class PollingTraits extends ModelTraits {
     type: "boolean"
   })
   shouldReplaceData = true;
+}
+
+export class CsvAvailableDimensionTraits extends ModelTraits {
+  @primitiveTrait({
+    type: "string",
+    name: "Dimension Name",
+    description: "The name of the dimension."
+  })
+  name?: string;
+
+  @primitiveArrayTrait({
+    type: "string",
+    name: "Dimension values",
+    description: "Possible dimension values."
+  })
+  values?: string[];
+
+  @primitiveTrait({
+    type: "string",
+    name: "Units",
+    description: "The units of the dimension."
+  })
+  units?: string;
+
+  @primitiveTrait({
+    type: "string",
+    name: "Unit Symbol",
+    description: "The unitSymbol of the dimension."
+  })
+  unitSymbol?: string;
+
+  @primitiveTrait({
+    type: "string",
+    name: "Default",
+    description: "The default value for the dimension."
+  })
+  default?: string;
+
+  @primitiveTrait({
+    type: "boolean",
+    name: "Multiple Values",
+    description: "Can the dimension support multiple values."
+  })
+  multipleValues?: boolean;
+
+  @primitiveTrait({
+    type: "boolean",
+    name: "Nearest Value",
+    description: "The nearest value of the dimension."
+  })
+  nearestValue?: boolean;
+}
+
+export class CsvAvailableLayerDimensionsTraits extends ModelTraits {
+  @primitiveTrait({
+    type: "string",
+    name: "Layer Name",
+    description: "The name of the layer for which dimensions are available."
+  })
+  layerName?: string;
+
+  @objectArrayTrait({
+    type: CsvAvailableDimensionTraits,
+    name: "Dimensions",
+    description: "The dimensions available for this layer.",
+    idProperty: "name"
+  })
+  dimensions?: CsvAvailableDimensionTraits[];
 }
 
 @traitClass({
@@ -75,4 +146,26 @@ export default class CsvCatalogItemTraits extends mixTraits(
     type: PollingTraits
   })
   polling?: PollingTraits;
+
+  @primitiveTrait({
+    type: "boolean",
+    name: "Disable dimension selectors",
+    description: "When true, disables the dimension selectors in the workbench."
+  })
+  disableDimensionSelectors = false;
+
+  @anyTrait({
+    name: "Dimensions",
+    description:
+      "Dimension parameters used to request a new version of the CSV data."
+  })
+  dimensions?: { [key: string]: string };
+
+  @objectArrayTrait({
+    type: CsvAvailableLayerDimensionsTraits,
+    name: "Available Dimensions",
+    description: "The available dimensions.",
+    idProperty: "layerName"
+  })
+  availableDimensions?: CsvAvailableLayerDimensionsTraits[];
 }
