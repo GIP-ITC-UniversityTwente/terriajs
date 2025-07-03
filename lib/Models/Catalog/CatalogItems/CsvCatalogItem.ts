@@ -233,6 +233,7 @@ export default class CsvCatalogItem
 
         dimensions.push({
           name: dim.name,
+          title: dim.title, // Use dimension title if available
           id: `${this.uniqueId}-${dim.name}`,
           options: dim.values.map((value) => {
             let name = value;
@@ -278,7 +279,6 @@ export default class CsvCatalogItem
               const separator = this.url?.includes("?") ? "&" : "?";
               this.setApiUrl(`${this.url}${separator}${query}`);
               this.refreshDataFromApi();
-              console.log(this);
             });
           }
         });

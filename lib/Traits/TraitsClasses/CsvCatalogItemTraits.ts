@@ -43,6 +43,13 @@ export class CsvAvailableDimensionTraits extends ModelTraits {
   })
   name?: string;
 
+  @primitiveTrait({
+    type: "string",
+    name: "Dimension Title",
+    description: "The title of the dimension."
+  })
+  title?: string;
+
   @primitiveArrayTrait({
     type: "string",
     name: "Dimension values",

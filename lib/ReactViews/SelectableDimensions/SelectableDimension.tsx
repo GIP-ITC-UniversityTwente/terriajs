@@ -37,7 +37,7 @@ const SelectableDimension: React.FC<{
         <>
           <label htmlFor={id}>
             <Text textLight medium as="span">
-              {parseCustomMarkdownToReactWithOptions(dim.name, {
+              {parseCustomMarkdownToReactWithOptions(dim.title || dim.name, {
                 inline: true
               })}
               :

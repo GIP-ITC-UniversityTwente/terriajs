@@ -28,6 +28,7 @@ export interface CapabilitiesLatLonBoundingBox {
 
 export type CapabilitiesDimension = string & {
   readonly name: string;
+  readonly title?: string;
   readonly units: string;
   readonly unitSymbol?: string;
   readonly default?: string;
@@ -39,6 +40,7 @@ export type CapabilitiesDimension = string & {
 
 export type CapabilitiesExtent = string & {
   readonly name: string;
+  readonly title?: string;
   readonly default?: string;
   readonly multipleValues?: boolean;
   readonly nearestValues?: boolean;
