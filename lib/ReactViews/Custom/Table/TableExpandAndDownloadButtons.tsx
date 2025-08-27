@@ -1,8 +1,9 @@
 import classNames from "classnames";
+import { TFunction } from "i18next";
 import { action, makeObservable, observable, runInAction } from "mobx";
 import { observer } from "mobx-react";
-import { Component } from "react";
-import { WithTranslation, withTranslation, TFunction } from "react-i18next";
+import React from "react";
+import { WithTranslation, withTranslation } from "react-i18next";
 import styled, { useTheme } from "styled-components";
 import filterOutUndefined from "../../../Core/filterOutUndefined";
 import ChartableMixin from "../../../ModelMixins/ChartableMixin";
@@ -11,7 +12,7 @@ import Terria from "../../../Models/Terria";
 import { Button, StyledButton } from "../../../Styled/Button";
 import Icon, { StyledIcon } from "../../../Styled/Icon";
 import UrlTraits from "../../../Traits/TraitsClasses/UrlTraits";
-import Styles from "./chart-expand-and-download-buttons.scss";
+import Styles from "./table-expand-and-download-buttons.scss";
 import Dropdown from "../../Generic/Dropdown";
 
 interface PropsType extends WithTranslation {
@@ -19,15 +20,16 @@ interface PropsType extends WithTranslation {
   sourceItems: Promise<ChartableMixin.Instance | undefined>[]; // Array of items or Promise returning item
   sourceNames?: string[];
   canDownload: boolean;
+  canExpand: boolean;
   downloads?: string[];
   downloadNames?: string[];
   raiseToTitle: boolean;
+  catalogItem: any;
   t: TFunction;
-  catalogItem?: any;
 }
 
 @observer
-class ChartExpandAndDownloadButtons extends Component<PropsType> {
+class TableExpandAndDownloadButtons extends React.Component<PropsType> {
   @observable sourceItems: ChartableMixin.Instance[] = [];
 
   constructor(props: PropsType) {
@@ -53,11 +55,11 @@ class ChartExpandAndDownloadButtons extends Component<PropsType> {
    */
   private expandItem(sourceIndex: number) {
     const terria = this.props.terria;
-
     runInAction(async () => {
       const sourceItems = this.sourceItems;
-      const itemToExpand = sourceItems[sourceIndex];
+      const itemToExpand: any = sourceItems[sourceIndex];
       const workbench = terria.workbench;
+
       if (!itemToExpand) {
         return;
       }
@@ -75,7 +77,7 @@ class ChartExpandAndDownloadButtons extends Component<PropsType> {
             workbenchItem?.type === "csv" &&
             itemToExpand.uniqueId?.split(":")[0] ===
               workbenchItem.uniqueId?.split(":")[0] &&
-            (itemToExpand as any).name === workbenchItem.name
+            itemToExpand.name === workbenchItem.name
           ) {
             workbench.remove(workbenchItem);
           }
@@ -83,8 +85,11 @@ class ChartExpandAndDownloadButtons extends Component<PropsType> {
       });
 
       try {
+        console.log(itemToExpand);
         terria.addModel(itemToExpand);
-      } catch {}
+      } catch {
+        /* eslint-disable-line no-empty */
+      }
       (await workbench.add(itemToExpand)).raiseError(terria, undefined, true);
     });
   }
@@ -122,13 +127,14 @@ class ChartExpandAndDownloadButtons extends Component<PropsType> {
         )
     );
 
-    const { sourceNames, canDownload, raiseToTitle, t } = this.props;
+    const { sourceNames, canDownload, canExpand, raiseToTitle, t } = this.props;
     if (sourceNames && sourceNames.length > 0) {
       const downloadNames = this.props.downloadNames || sourceNames;
       return (
         <ExpandAndDownloadDropdowns
           sourceNames={sourceNames}
           canDownload={canDownload}
+          canExpand={canExpand}
           downloads={downloadNames.map((name, i) => ({
             name,
             href: downloads[i]
@@ -143,6 +149,7 @@ class ChartExpandAndDownloadButtons extends Component<PropsType> {
     return (
       <ExpandAndDownloadButtons
         onExpand={this.expandButton}
+        canExpand={canExpand}
         downloadUrl={
           canDownload && downloads.length > 0 ? downloads[0] : undefined
         }
@@ -155,6 +162,7 @@ class ChartExpandAndDownloadButtons extends Component<PropsType> {
 const ExpandAndDownloadDropdowns = function (props: {
   sourceNames: string[];
   canDownload: boolean;
+  canExpand: boolean;
   downloads: { name: string; href: string }[];
   onExpand: (_: unknown, selectedIndex: number) => void;
   raiseToTitle: boolean;
@@ -174,13 +182,15 @@ const ExpandAndDownloadDropdowns = function (props: {
 
   return (
     <ExpandAndDownloadContainer raiseToTitle={props.raiseToTitle}>
-      <Dropdown
-        selectOption={props.onExpand}
-        options={props.sourceNames.map((name) => ({ name }))}
-        theme={expandDropdownTheme}
-      >
-        {props.t("chart.expand") + " ▾"}
-      </Dropdown>
+      {props.canExpand && (
+        <Dropdown
+          selectOption={props.onExpand}
+          options={props.sourceNames.map((name) => ({ name }))}
+          theme={expandDropdownTheme}
+        >
+          {props.t("chart.expand") + " ▾"}
+        </Dropdown>
+      )}
       {props.canDownload && (
         <Dropdown options={props.downloads} theme={downloadDropdownTheme}>
           {props.t("chart.download") + " ▾"}
@@ -193,14 +203,18 @@ const ExpandAndDownloadDropdowns = function (props: {
 const ExpandAndDownloadButtons = function (props: {
   onExpand: () => void;
   downloadUrl?: string;
+  canExpand?: boolean;
   t: TFunction;
 }) {
   const theme = useTheme();
+  console.log(props.canExpand);
   return (
     <ExpandAndDownloadContainer>
-      <ButtonChartExpand type="button" onClick={props.onExpand}>
-        {props.t("chart.expand")}
-      </ButtonChartExpand>
+      {props.canExpand && (
+        <ButtonChartExpand type="button" onClick={props.onExpand}>
+          {props.t("chart.expand")}
+        </ButtonChartExpand>
+      )}
       {props.downloadUrl && (
         <DownloadLink download href={props.downloadUrl}>
           <StyledIcon
@@ -243,4 +257,4 @@ const DownloadLink = styled(StyledButton).attrs(() => ({
   }
 `;
 
-export default withTranslation()(ChartExpandAndDownloadButtons);
+export default withTranslation()(TableExpandAndDownloadButtons);

@@ -11,11 +11,14 @@ interface Dimension {
   readonly id?: string;
   /** Human readable name */
   readonly name?: string;
+
+  readonly title?: string;
 }
 
 export interface EnumDimensionOption<T = string> {
   readonly id?: T;
   readonly name?: string;
+  readonly title?: string;
 }
 
 export interface EnumDimension<T = string> extends Dimension {

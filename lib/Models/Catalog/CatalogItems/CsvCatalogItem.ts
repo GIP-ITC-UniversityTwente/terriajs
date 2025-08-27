@@ -1,5 +1,7 @@
 import i18next from "i18next";
 import { computed, makeObservable, override, runInAction } from "mobx";
+import combine from "terriajs-cesium/Source/Core/combine";
+import filterOutUndefined from "../../../Core/filterOutUndefined";
 import isDefined from "../../../Core/isDefined";
 import TerriaError from "../../../Core/TerriaError";
 import AutoRefreshingMixin from "../../../ModelMixins/AutoRefreshingMixin";
@@ -14,6 +16,9 @@ import StratumOrder from "../../Definition/StratumOrder";
 import HasLocalData from "../../HasLocalData";
 import Terria from "../../Terria";
 import proxyCatalogItemUrl from "../proxyCatalogItemUrl";
+import SelectableDimensions, {
+  SelectableDimensionEnum
+} from "../../SelectableDimensions/SelectableDimensions";
 
 // Types of CSVs:
 // - Points - Latitude and longitude columns or address
@@ -29,13 +34,15 @@ export default class CsvCatalogItem
   extends AutoRefreshingMixin(
     TableMixin(UrlMixin(CreateModel(CsvCatalogItemTraits)))
   )
-  implements HasLocalData
+  implements HasLocalData, SelectableDimensions
 {
   static get type() {
     return "csv";
   }
 
   private _csvFile?: File;
+
+  private _apiUrl?: string;
 
   constructor(
     id: string | undefined,
@@ -56,6 +63,10 @@ export default class CsvCatalogItem
 
   setFileInput(file: File) {
     this._csvFile = file;
+  }
+
+  setApiUrl(url: string) {
+    this._apiUrl = url;
   }
 
   @computed
@@ -130,6 +141,8 @@ export default class CsvCatalogItem
       return;
     }
 
+    console.log(this.polling.url, this._apiUrl, this.refreshUrl);
+
     Csv.parseUrl(
       proxyCatalogItemUrl(this, this.refreshUrl),
       true,
@@ -141,6 +154,22 @@ export default class CsvCatalogItem
         } else {
           this.append(dataColumnMajor);
         }
+      });
+    });
+  }
+
+  refreshDataFromApi() {
+    if (!this._apiUrl) {
+      return;
+    }
+
+    Csv.parseUrl(
+      proxyCatalogItemUrl(this, this._apiUrl),
+      true,
+      this.ignoreRowsStartingWithComment
+    ).then((dataColumnMajor) => {
+      runInAction(() => {
+        this.dataColumnMajor = dataColumnMajor;
       });
     });
   }
@@ -159,8 +188,19 @@ export default class CsvCatalogItem
         this.ignoreRowsStartingWithComment
       );
     } else if (this.url !== undefined) {
+      let itemUrl = this.url;
+      if (isDefined(this.dimensions)) {
+        const query = Object.entries(this.dimensions)
+          .map(
+            ([key, value]) =>
+              `${key.toLowerCase()}=${encodeURIComponent(String(value))}`
+          )
+          .join("&");
+        const separator = this.url?.includes("?") ? "&" : "?";
+        itemUrl = `${this.url}${separator}${query}`;
+      }
       return Csv.parseUrl(
-        proxyCatalogItemUrl(this, this.url),
+        proxyCatalogItemUrl(this, itemUrl),
         true,
         this.ignoreRowsStartingWithComment
       );
@@ -173,6 +213,91 @@ export default class CsvCatalogItem
         })
       );
     }
+  }
+
+  @computed
+  get csvDimensionSelectableDimensions(): SelectableDimensionEnum[] {
+    const dimensions: SelectableDimensionEnum[] = [];
+
+    // For each layer -> For each dimension
+    this.availableDimensions.forEach((layer) => {
+      layer.dimensions.forEach((dim) => {
+        // Only add dimensions if hasn't already been added (multiple layers may have the same dimension)
+        if (
+          !isDefined(dim.name) ||
+          dim.values.length < 2 ||
+          dimensions.findIndex((findDim) => findDim.name === dim.name) !== -1
+        ) {
+          return;
+        }
+
+        dimensions.push({
+          name: dim.name,
+          title: dim.title, // Use dimension title if available
+          id: `${this.uniqueId}-${dim.name}`,
+          options: dim.values.map((value) => {
+            let name = value;
+            // Add units and unitSybol if defined
+            if (typeof dim.units === "string" && dim.units !== "") {
+              if (typeof dim.unitSymbol === "string" && dim.unitSymbol !== "") {
+                name = `${value} (${dim.units} ${dim.unitSymbol})`;
+              } else {
+                name = `${value} (${dim.units})`;
+              }
+            }
+            return {
+              name,
+              id: value
+            };
+          }),
+
+          // Set selectedId to value stored in `dimensions` trait, the default value, or the first available value
+          selectedId:
+            this.dimensions?.[dim.name]?.toString() ||
+            dim.default ||
+            dim.values[0],
+
+          setDimensionValue: (
+            stratumId: string,
+            newDimension: string | undefined
+          ) => {
+            let newDimensions: any = {};
+
+            newDimensions[dim.name!] = newDimension;
+
+            if (isDefined(this.dimensions)) {
+              newDimensions = combine(newDimensions, this.dimensions);
+            }
+            runInAction(() => {
+              this.setTrait(stratumId, "dimensions", newDimensions);
+              const query = Object.entries(newDimensions)
+                .map(
+                  ([key, value]) =>
+                    `${key.toLowerCase()}=${encodeURIComponent(String(value))}`
+                )
+                .join("&");
+              const separator = this.url?.includes("?") ? "&" : "?";
+              this.setApiUrl(`${this.url}${separator}${query}`);
+              this.refreshDataFromApi();
+            });
+          }
+        });
+      });
+    });
+
+    return dimensions;
+  }
+
+  @override
+  get selectableDimensions() {
+    if (this.disableDimensionSelectors) {
+      return super.selectableDimensions;
+    }
+
+    return filterOutUndefined([
+      ...super.selectableDimensions,
+      ...this.csvDimensionSelectableDimensions
+    ]);
   }
 }
 

@@ -1,4 +1,4 @@
-import type { scaleLinear, scaleTime } from "@visx/scale";
+import type { scaleLinear, scaleTime, scaleBand } from "@visx/scale";
 
 export type XScale =
   | ReturnType<typeof scaleLinear<number>>

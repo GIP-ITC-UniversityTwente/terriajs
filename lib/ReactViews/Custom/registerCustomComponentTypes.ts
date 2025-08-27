@@ -5,6 +5,7 @@ import CesiumIonConnector from "../ExplorerWindow/Tabs/MyDataTab/CesiumIonConnec
 import ApiTableChartCustomComponent from "./ApiTableCustomComponent";
 import CollapsibleCustomComponent from "./CollapsibleCustomComponent";
 import CsvChartCustomComponent from "./CsvChartCustomComponent";
+import CsvTableCustomComponent from "./CsvTableCustomComponent";
 import CustomComponent from "./CustomComponent";
 import FeedbackLinkCustomComponent from "./FeedbackLinkCustomComponent";
 import SOSChartCustomComponent from "./SOSChartCustomComponent";
@@ -19,6 +20,7 @@ import TerriaTooltipCustomComponent from "./TerriaTooltip";
  */
 export default function registerCustomComponentTypes(terria?: Terria) {
   CustomComponent.register(new CsvChartCustomComponent());
+  CustomComponent.register(new CsvTableCustomComponent());
   CustomComponent.register(new SOSChartCustomComponent());
   CustomComponent.register(new ApiTableChartCustomComponent());
   CustomComponent.register(new CollapsibleCustomComponent());

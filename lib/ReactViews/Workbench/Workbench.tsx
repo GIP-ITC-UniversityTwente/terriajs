@@ -7,6 +7,7 @@ import Terria from "../../Models/Terria";
 import ViewState from "../../ReactViewModels/ViewState";
 import Box from "../../Styled/Box";
 import { RawButton } from "../../Styled/Button";
+import { Tabs, Tab } from "../../Styled/Tab";
 import { TextSpan } from "../../Styled/Text";
 import BadgeBar from "../BadgeBar";
 import Icon, { StyledIcon } from "../../Styled/Icon";
@@ -23,11 +24,19 @@ interface IProps extends WithTranslation {
   t: TFunction;
 }
 
+interface WorkBenchState {
+  activeIndex: number;
+}
+
 @observer
-class Workbench extends Component<IProps> {
+class Workbench extends Component<IProps, WorkBenchState> {
   constructor(props: IProps) {
     super(props);
     makeObservable(this);
+
+    this.state = {
+      activeIndex: 0
+    };
   }
 
   disableAll() {
@@ -66,6 +75,12 @@ class Workbench extends Component<IProps> {
     (this.props.terria.timelineStack.items as any).clear();
   }
 
+  @action.bound
+  handleTabChange(index: number) {
+    this.setState({ activeIndex: index });
+    this.props.viewState.isChartPanelVisible = index == 1;
+  }
+
   render() {
     const { t } = this.props;
     const shouldExpandAll = this.props.terria.workbench.shouldExpandAll;
@@ -77,6 +92,7 @@ class Workbench extends Component<IProps> {
       )
       .every((it) => !it.show);
 
+    const { activeIndex } = this.state;
     return (
       <Box column fullWidth styledMinHeight={"0"} flex={1}>
         <BadgeBar
@@ -194,9 +210,15 @@ class Workbench extends Component<IProps> {
             </TextSpan>
           </RawButton>
         </BadgeBar>
+        <Tabs activeIndex={activeIndex} onTabChange={this.handleTabChange}>
+          <Tab label={t("workbench.tabs.mapHeading")} />
+          <Tab label={t("workbench.tabs.chartHeading")} />
+          <Tab label={t("workbench.tabs.tableHeading")} />
+        </Tabs>
         <WorkbenchList
           viewState={this.props.viewState}
           terria={this.props.terria}
+          activeIndex={activeIndex}
         />
       </Box>
     );

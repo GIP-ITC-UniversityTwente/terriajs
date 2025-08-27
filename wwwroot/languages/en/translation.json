@@ -34,7 +34,7 @@
       "content": "## Location search\n\nEnter a locality or address to easily locate a point of interest on the map."
     },
     "exploreMapDataButton": {
-      "content": "## Explore Digital Twin data\n\nBrowse the Terria Data Catalogue of available data and add it to the digital twin here. You can add multiple datasets at any one time, and you’ll see them listed down below in the Digital Twin Data panel."
+      "content": "## Explore data\n\nBrowse the catalogue of available data and add it to the map here. You can add multiple datasets at any one time, and you’ll see them listed down below in the Workbench."
     },
     "sidePanelUploadButton": {
       "content": "## Upload Data\n\nYou can upload your own data to the map to view it with other data sets. Upload a file or link to an existing online data set or data service. Supported data formats include CSV, GeoJSON, KML, GPX and CZML."
@@ -343,12 +343,12 @@
     "showCuratedData": "Show Curated Data"
   },
   "welcomeMessage": {
-    "title": "Let's get you started",
-    "welcomeMessage": "Interested in data discovery and exploration?<br/>Dive right in and get started or check the following help guide options.",
-    "welcomeMessageOnMobile": "Interested in data discovery and exploration?",
+    "title": "Statistics from Space",
+    "welcomeMessage": "The Statistics from Space aims to develop and realize a robust system for agricultural production statistics in Mozambique. The foreseen eventual user is the Ministry of Agriculture and Rural Development (MADER). At present, our second-year pilot involves three provinces: Gaza, Manica and Zambezia. In these days, fieldwork is conducted in the province of Manica, the first we are addressing. Originally, we were scheduled to start in the more southern Gaza province but floods there prevented work to be carried out. Because of ongoing fieldwork we are happy to see the data come in and follow progress. The project is a collaboration between IFPRI (Washington, DC), UT/ITC (GIP, NRS), Universidade Eduardo Mondlane (Maputo, Mozambique) and Seoul National University (South Korea). Funding comes from South Korea's Ministry of Agriculture, Food and Rural Affairs (MAFRA).",
+    "welcomeMessageOnMobile": "The Statistics from Space aims to develop and realize a robust system for agricultural production statistics in Mozambique. The foreseen eventual user is the Ministry of Agriculture and Rural Development (MADER). At present, our second-year pilot involves three provinces: Gaza, Manica and Zambezia. In these days, fieldwork is conducted in the province of Manica, the first we are addressing. Originally, we were scheduled to start in the more southern Gaza province but floods there prevented work to be carried out. Because of ongoing fieldwork we are happy to see the data come in and follow progress",
     "tourBtnText": "Take the tour",
     "helpBtnText": "I'll need some help",
-    "exploreDataBtnText": "Explore map data",
+    "exploreDataBtnText": "Explore data",
     "searchBtnText": "Search for a location",
     "dismissText": "Close message and don't show me this again"
   },
@@ -559,7 +559,12 @@
     "addItemErrorMessage": "An error occurred while loading the catalog item.",
     "searchItem": "Search",
     "searchItemTitle": "Search",
-    "splitScreenMode": "SPLIT SCREEN MODE"
+    "splitScreenMode": "SPLIT SCREEN MODE",
+    "tabs": {
+      "mapHeading": "Map",
+      "chartHeading": "Chart",
+      "tableHeading": "Table"
+    }
   },
   "dateTime": {
     "selectorLabel": "Time:",
@@ -2208,9 +2213,9 @@
     "invalid": "Invalid"
   },
   "relatedMaps": {
-    "buttonText": "Related Maps",
-    "buttonTitle": "See related maps",
-    "panelHeading": "Related Maps",
+    "buttonText": "Related Sites",
+    "buttonTitle": "See related sites",
+    "panelHeading": "Related Sites",
     "panelText": "Clicking on a map below will open it in a separate window or tab."
   }
 }

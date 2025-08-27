@@ -108,6 +108,8 @@ export default class ViewState {
 
   @observable printWindow: Window | null = null;
 
+  @observable isChartPanelVisible: boolean = false;
+
   /**
    * The currently-selected web service type on the My Data -> Add web data panel.
    */
@@ -168,6 +170,10 @@ export default class ViewState {
   @action
   setTrainerBarShowingAllSteps(bool: boolean): void {
     this.trainerBarShowingAllSteps = bool;
+  }
+  @action
+  setsChartPanelVisible(bool: boolean) {
+    this.isChartPanelVisible = bool;
   }
   @action
   setTrainerBarExpanded(bool: boolean): void {
@@ -377,6 +383,7 @@ export default class ViewState {
   private _pickedFeaturesSubscription: IReactionDisposer;
   private _disclaimerVisibleSubscription: IReactionDisposer;
   private _isMapFullScreenSubscription: IReactionDisposer;
+  private _isChartPanelVisibleSubscription: IReactionDisposer;
   private _showStoriesSubscription: IReactionDisposer;
   private _mobileMenuSubscription: IReactionDisposer;
   private _storyPromptSubscription: IReactionDisposer;
@@ -439,6 +446,13 @@ export default class ViewState {
           // if so we should show it when app first load, if workbench is hidden
           this.storyShown = terria.configParameters.storyEnabled;
         }
+      }
+    );
+
+    this._isChartPanelVisibleSubscription = reaction(
+      () => this.isChartPanelVisible,
+      (isChartPanelVisible: boolean) => {
+        // console.log('Chart panel visible = ', isChartPanelVisible)
       }
     );
 
@@ -543,6 +557,7 @@ export default class ViewState {
     this._disclaimerVisibleSubscription();
     this._mobileMenuSubscription();
     this._isMapFullScreenSubscription();
+    this._isChartPanelVisibleSubscription();
     this._showStoriesSubscription();
     this._storyPromptSubscription();
     this._previewedItemIdSubscription();

@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import Terria from "../../../../Models/Terria";
 import Box from "../../../../Styled/Box";
@@ -16,10 +17,61 @@ type Props = {
 
 const LangPanel = (props: Props) => {
   const { t, i18n } = useTranslation();
+  const [lang, setLang] = React.useState(i18n.language);
+  const [currentLanguageName, setCurrentLanguageName] = React.useState("");
 
-  if (!props.terria.configParameters.languageConfiguration?.languages) {
+  const languageMap = (props.terria.configParameters.languageConfiguration
+    ?.languages ?? {}) as { [key: string]: string };
+
+  if (!languageMap) {
     return null;
   }
+
+  useEffect(() => {
+    const langFromUrl = new URLSearchParams(location.search).get("lang");
+    if (langFromUrl) {
+      i18n.changeLanguage(langFromUrl);
+    } else {
+      i18n.changeLanguage("en");
+    }
+
+    const currentLanguageName = getLanguageName();
+    setLang(i18n.language);
+    setCurrentLanguageName(currentLanguageName);
+  }, [i18n]);
+
+  const getLanguageName = () => {
+    const langFromUrl: string | null = new URLSearchParams(location.search).get(
+      "lang"
+    );
+
+    if (langFromUrl) {
+      setLang(langFromUrl);
+      return languageMap[langFromUrl];
+    } else {
+      const fallbackLanguage = "en";
+      const lang = "English";
+      setLang(fallbackLanguage);
+      updateUrlParameter("lang", fallbackLanguage);
+      return lang;
+    }
+  };
+
+  const updateUrlParameter = (key: string, value: string) => {
+    const params = new URLSearchParams(location.search);
+    params.set(key, value);
+    window.location.search = params.toString();
+  };
+
+  const languageChanged = (lang: string) => {
+    setLang(lang);
+    i18n.changeLanguage(lang);
+  };
+
+  const onLanguageSelectorClick = (key: string) => {
+    languageChanged(key);
+    updateUrlParameter("lang", key);
+  };
 
   return (
     //@ts-expect-error - not yet ready to tackle tsfying MenuPanel
@@ -46,11 +98,9 @@ const LangPanel = (props: Props) => {
             padding-left: 0;
           `}
         >
-          {Object.entries(
-            props.terria.configParameters.languageConfiguration.languages
-          ).map(([key, value]) => (
+          {Object.entries(languageMap).map(([key, value]) => (
             <Li key={key}>
-              <RawButton onClick={() => i18n.changeLanguage(key)}>
+              <RawButton onClick={() => onLanguageSelectorClick(key)}>
                 {value}
               </RawButton>
             </Li>

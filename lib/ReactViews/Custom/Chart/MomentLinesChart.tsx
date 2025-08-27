@@ -20,7 +20,9 @@ const _MomentLines = forwardRef<ChartZoomHandle, Props>(
           lines.forEach((line, i) => {
             const point = chartItem.points[i];
             if (point) {
-              const x = scales.x(point.x);
+              const x = scales.x(
+                typeof point.x === "string" ? Number(point.x) : point.x
+              );
               line.setAttribute("x1", x.toString());
               line.setAttribute("x2", x.toString());
             }
@@ -35,7 +37,7 @@ const _MomentLines = forwardRef<ChartZoomHandle, Props>(
     return (
       <g id={id}>
         {chartItem.points.map((p, i) => {
-          const x = scales.x(p.x);
+          const x = scales.x(typeof p.x === "string" ? Number(p.x) : p.x);
           const y = scales.y(0);
           return (
             <Line
