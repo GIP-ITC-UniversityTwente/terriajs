@@ -33,6 +33,8 @@ export interface ChartCustomComponentAttributes {
   /** An id for the chart; give different charts from the same feature different ids. The actual catalogItem.id used for the expanded chart will also incorporate the chart title and the catalog item name it came from. */
   identifier?: string;
 
+  id?: string;
+
   /** 'true' to hide the Expand and Download buttons on the chart.  By default and for any other value, the buttons are shown when applicable.
    * Overrides can-download. */
   hideButtons?: boolean;
@@ -89,6 +91,8 @@ export interface ChartCustomComponentAttributes {
   /** csv-formatted data, with \n for newlines. Eg. data="time,a,b\n2016-01-01,2,3\n2016-01-02,5,6".
    * or json-formatted string data, with \quot; for quotes, eg. `data="[[\quot;a\quot;,\quot;b\quot;],[2,3],[5,6]]"`. */
   data?: string;
+
+  type: string;
 }
 
 /**
@@ -103,6 +107,7 @@ export const ChartAttributes = [
   "download-names",
   "preview-x-label",
   "data",
+  "id",
   "identifier",
   "x-column",
   "y-column",
@@ -113,7 +118,8 @@ export const ChartAttributes = [
   "highlight-x",
   "title",
   "can-download",
-  "hide-buttons"
+  "hide-buttons",
+  "type"
 ];
 
 /**
@@ -332,13 +338,14 @@ export default abstract class ChartCustomComponent<
 
       chartElements.push(
         createElement(Chart, {
-          key: "chart",
+          key: "chart-" + createGuid(),
           item: chartItem,
           xAxisLabel: attrs.previewXLabel,
           // Currently implementation supports showing only one column in the
           // feature info panel chart
           yColumn: attrs.yColumns?.[0],
-          height: 110
+          height: 220,
+          catalogItem: context.catalogItem
           // styling: attrs.styling,
           // highlightX: attrs.highlightX,
           // transitionDuration: 300
@@ -349,7 +356,7 @@ export default abstract class ChartCustomComponent<
     return createElement(
       "div",
       {
-        key: "chart-wrapper",
+        key: "chart-wrapper-" + createGuid(),
         className: ChartPreviewStyles.previewChartWrapper
       },
       chartElements
@@ -519,6 +526,7 @@ export default abstract class ChartCustomComponent<
     );
 
     return {
+      id: nodeAttrs["id"] ?? nodeAttrs["identifier"],
       title: nodeAttrs["title"],
       identifier: nodeAttrs["identifier"],
       hideButtons: nodeAttrs["hide-buttons"] === "true",
@@ -533,7 +541,8 @@ export default abstract class ChartCustomComponent<
       columnUnits,
       xColumn: nodeAttrs["x-column"],
       previewXLabel: nodeAttrs["preview-x-label"],
-      yColumns
+      yColumns,
+      type: nodeAttrs["type"] ?? "line"
     };
   }
 

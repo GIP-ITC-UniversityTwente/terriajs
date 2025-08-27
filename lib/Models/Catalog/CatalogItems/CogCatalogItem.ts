@@ -192,7 +192,8 @@ export default class CogCatalogItem extends MappableMixin(
         renderOptions: omitUndefined({
           nodata: this.renderOptions.nodata,
           convertToRGB: this.renderOptions.convertToRGB,
-          resampleMethod: this.renderOptions.resampleMethod
+          resampleMethod: this.renderOptions.resampleMethod,
+          single: this.renderOptions.single
         })
       })
     );

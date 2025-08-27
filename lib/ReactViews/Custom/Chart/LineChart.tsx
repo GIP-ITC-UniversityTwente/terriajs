@@ -22,7 +22,13 @@ const _LineChart = forwardRef<ChartZoomHandle, Props>(
           const el = document.querySelector(`#${id} path`);
           if (!el) return;
           const path = line<ChartPoint>()
-            .x((p: ChartPoint) => scales.x(p.x))
+            .x((p: ChartPoint) =>
+              scales.x(
+                typeof p.x === "number" || p.x instanceof Date
+                  ? scales.x(p.x)
+                  : 0
+              )
+            )
             .y((p: ChartPoint) => scales.y(p.y));
           el.setAttribute("d", path(chartItem.points) as string);
         }
@@ -36,7 +42,11 @@ const _LineChart = forwardRef<ChartZoomHandle, Props>(
       <g id={id}>
         <LinePath
           data={chartItem.points}
-          x={(p) => scales.x(p.x)}
+          x={(p) =>
+            scales.x(
+              typeof p.x === "number" || p.x instanceof Date ? scales.x(p.x) : 0
+            )
+          }
           y={(p) => scales.y(p.y)}
           stroke={stroke}
           strokeWidth={2}

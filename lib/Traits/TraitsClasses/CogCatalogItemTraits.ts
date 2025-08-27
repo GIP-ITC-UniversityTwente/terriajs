@@ -1,6 +1,8 @@
 import objectTrait from "../Decorators/objectTrait";
+import { JsonObject } from "../../Core/Json";
 import primitiveTrait from "../Decorators/primitiveTrait";
 import ModelTraits from "../ModelTraits";
+import anyTrait from "../Decorators/anyTrait";
 import { traitClass } from "../Trait";
 import mixTraits from "../mixTraits";
 import CatalogMemberTraits from "./CatalogMemberTraits";
@@ -31,6 +33,12 @@ export class CogRenderOptionsTraits extends ModelTraits {
     description: "Geotiff resample method. Defaults to `bilinear`."
   })
   resampleMethod?: "nearest" | "bilinear" = "nearest";
+
+  @anyTrait({
+    name: "single",
+    description: "Single."
+  })
+  single?: JsonObject | null;
 }
 
 @traitClass({

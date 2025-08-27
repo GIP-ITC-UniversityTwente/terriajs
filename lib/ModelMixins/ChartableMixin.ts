@@ -5,8 +5,9 @@ import { getMax, getMin } from "../Core/math";
 import Model from "../Models/Definition/Model";
 import { GlyphStyle } from "../ReactViews/Custom/Chart/Glyphs";
 import ModelTraits from "../Traits/ModelTraits";
+import { TableItem } from "./InfotableMixin";
 
-type Scale = "linear" | "time";
+type Scale = "linear" | "time" | "band";
 
 export interface ChartAxis {
   name: string;
@@ -15,16 +16,20 @@ export interface ChartAxis {
 }
 
 export interface ChartDomain {
-  x: (number | Date)[];
+  x: (number | Date | string)[];
   y: number[];
 }
 
-export function calculateDomain(points: ChartPoint[]): ChartDomain {
+export function calculateDomain(
+  points: ChartPoint[],
+  scale: string
+): ChartDomain {
   const xs = points.map((p) => p.x);
   const ys = points.map((p) => p.y);
-  const asNum = (x: Date | number) => (x instanceof Date ? x.getTime() : x);
+  const asNum = (x: Date | number | string) =>
+    x instanceof Date ? x.getTime() : scale == "linear" ? parseInt("" + x) : x;
   return {
-    x: [minBy(xs, asNum) ?? 0, maxBy(xs, asNum) ?? 0],
+    x: scale === "band" ? xs : [minBy(xs, asNum) ?? 0, maxBy(xs, asNum) ?? 0],
     y: [getMin(ys) ?? 0, getMax(ys) ?? 0]
   };
 }
@@ -36,13 +41,14 @@ export function axesMatch(a1: ChartAxis, a2: ChartAxis) {
 }
 
 export type ChartItemType =
+  | "bar"
   | "line"
   | "momentLines"
   | "momentPoints"
   | "lineAndPoint";
 
 export interface ChartPoint {
-  x: number | Date;
+  x: number | Date | string;
   y: number;
   isSelected?: boolean;
 }
@@ -69,12 +75,15 @@ export interface ChartItem {
   onClick?: any;
   pointOnMap?: LatLonHeight;
   glyphStyle?: GlyphStyle;
+  chartOptions?: any;
 }
 
 type BaseType = Model<ModelTraits>;
 
 function ChartableMixin<T extends AbstractConstructor<BaseType>>(Base: T) {
   abstract class ChartableMixin extends Base {
+    chartOptions: any;
+
     get hasChartableMixin() {
       return true;
     }
@@ -87,6 +96,19 @@ function ChartableMixin<T extends AbstractConstructor<BaseType>>(Base: T) {
      * Gets the items to show on a chart.
      */
     abstract get chartItems(): ChartItem[];
+
+    get tableItems(): TableItem[] {
+      return this.chartItems.map((chartItem) => {
+        return {
+          id: chartItem.id,
+          name: chartItem.name,
+          key: chartItem.key,
+          item: chartItem.item,
+          columns: chartItem.points.map((item) => "" + item.y),
+          rows: []
+        };
+      });
+    }
   }
 
   return ChartableMixin;

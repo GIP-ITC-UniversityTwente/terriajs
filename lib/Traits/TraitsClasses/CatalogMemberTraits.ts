@@ -257,6 +257,12 @@ class CatalogMemberTraits extends ModelTraits {
       "True (default) if this catalog member may be included in share links. False to exclude it from share links."
   })
   shareable: boolean = true;
+
+  @anyTrait({
+    name: "customProperties",
+    description: "Gets or sets the dictionary of custom item properties"
+  })
+  customProperties?: JsonObject;
 }
 
 /* eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging */

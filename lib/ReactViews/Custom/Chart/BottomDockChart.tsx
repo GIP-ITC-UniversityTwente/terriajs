@@ -163,7 +163,11 @@ const Chart: React.FC<ChartProps> = observer(
 
     const cursorX =
       pointsNearMouse.length > 0
-        ? xScale(pointsNearMouse[0].point.x)
+        ? xScale(
+            typeof pointsNearMouse[0].point.x === "string"
+              ? new Date(pointsNearMouse[0].point.x)
+              : pointsNearMouse[0].point.x
+          )
         : mouseCoords?.x;
 
     const tooltip = useMemo(() => {
@@ -338,7 +342,10 @@ const findNearestPoint = (
 ) => {
   function distance(coords: ChartPoint, point: ChartPoint) {
     // Works with numbers or Dates
-    return point ? +coords.x - +xScale(point.x) : Infinity;
+    return point
+      ? +coords.x -
+          +xScale(typeof point.x === "string" ? new Date(point.x) : point.x)
+      : Infinity;
   }
 
   let left = 0;

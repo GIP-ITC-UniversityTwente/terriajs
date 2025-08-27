@@ -65,7 +65,10 @@ const _MomentPointsChart = function MomentPointsChart(
         vGlyphs.forEach((vGlyph, i) => {
           const point = points[i];
           if (point) {
-            const left = scales.x(point.x);
+            const left =
+              typeof point.x === "number" || point.x instanceof Date
+                ? scales.x(point.x)
+                : 0;
             const top = scales.y(point.y);
             const scale = point.isSelected ? "scale(1.4, 1.4)" : "";
             vGlyph.setAttribute(
@@ -102,7 +105,9 @@ const _MomentPointsChart = function MomentPointsChart(
       {points.map((p, i) => (
         <Glyph
           key={`${baseKey}-${i}`}
-          left={scales.x(p.x)}
+          left={
+            typeof p.x === "number" || p.x instanceof Date ? scales.x(p.x) : 0
+          }
           top={scales.y(p.y)}
           size={100}
           fill={fillColor}

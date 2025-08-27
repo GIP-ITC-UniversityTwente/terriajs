@@ -2379,6 +2379,36 @@
       "nameProp": "clue_area",
       "description": "City of Melbourne Census of Land Use and Employment",
       "bbox": [144.88, -37.86, 145.0, -37.77]
+    },
+    "MAFRA_Districts": {
+      "layerName": "Districts",
+      "server": "https://mapfra.itc.utwente.nl/regionmapping/districts/{z}/{x}/{y}.pbf",
+      "serverType": "MVT",
+      "serverMaxNativeZoom": 12,
+      "serverMinZoom": 0,
+      "serverMaxZoom": 28,
+      "regionIdsFile": "build/TerriaJS/data/regionids/region_map-districts_id.json",
+      "uniqueIdProp": "FID",
+      "regionProp": "dist_id",
+      "nameProp": "dist_id",
+      "aliases": ["district_id"],
+      "bbox": [30.212154, -26.866438, 40.840626, -10.472198],
+      "description": "Districts of Gaza, Manica & Zambezia"
+    },
+    "MAFRA_Provinces": {
+      "layerName": "Provinces",
+      "server": "https://mapfra.itc.utwente.nl/regionmapping/provinces/{z}/{x}/{y}.pbf",
+      "serverType": "MVT",
+      "serverMaxNativeZoom": 12,
+      "serverMinZoom": 0,
+      "serverMaxZoom": 28,
+      "regionIdsFile": "build/TerriaJS/data/regionids/region_map-provinces_id.json",
+      "uniqueIdProp": "FID",
+      "regionProp": "prov_id",
+      "nameProp": "prov_id",
+      "aliases": ["province_id"],
+      "bbox": [30.212154, -26.866438, 40.840626, -10.472198],
+      "description": "Gaza, Manica & Zambezia"
     }
   }
 }

@@ -15,6 +15,7 @@ import ViewerMode from "../../../../Models/ViewerMode";
 import { GLYPHS } from "../../../../Styled/Icon";
 import StyleTraits from "../../../../Traits/TraitsClasses/StyleTraits";
 import MapNavigationItemController from "../../../../ViewModels/MapNavigation/MapNavigationItemController";
+import { toJSON } from "yaml/util";
 
 interface PropTypes {
   terria: Terria;
@@ -121,11 +122,11 @@ export class MyLocation extends MapNavigationItemController {
           type: "Point",
           coordinates: [longitude, latitude]
         },
-        properties: {
+        properties: toJSON({
           title: t("location.location"),
           longitude: longitude,
           latitude: latitude
-        }
+        })
       });
       // Need to specify rectangle for ideal zoom to work properly in 3D map.
       const closeUpRange = 0.002;

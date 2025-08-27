@@ -135,7 +135,7 @@ export const XAxis = memo(({ scale, ...restProps }: XAxisProps) => {
       // .nice() rounds the scale so that the aprox beginning and
       // aprox end labels are shown
       // See: https://stackoverflow.com/questions/21753126/d3-js-starting-and-ending-tick
-      scale={scale.nice()}
+      scale={scale}
       {...restProps}
     />
   );

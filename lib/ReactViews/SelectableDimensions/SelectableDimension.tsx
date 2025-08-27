@@ -37,7 +37,7 @@ const SelectableDimension: FC<{
         <>
           <label htmlFor={id}>
             <Text textGreyLighter medium as="span">
-              {parseCustomMarkdownToReactWithOptions(dim.name, {
+              {parseCustomMarkdownToReactWithOptions(dim.title || dim.name, {
                 inline: true
               })}
               :

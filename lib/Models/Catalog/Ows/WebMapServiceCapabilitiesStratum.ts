@@ -343,6 +343,7 @@ export default class WebMapServiceCapabilitiesStratum extends LoadableStratum(
           .map((dim) => {
             return {
               name: dim.name,
+              title: dim.title,
               units: dim.units,
               unitSymbol: dim.unitSymbol,
               default: dim.default,

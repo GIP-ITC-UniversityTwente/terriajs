@@ -286,12 +286,12 @@
     "panelHeading": "Informações sobre recursos"
   },
   "welcomeMessage": {
-    "title": "Vamos começar",
+    "title": "Estatísticas do Espaço",
     "helpBtnText": "Vou precisar de ajuda",
     "tourBtnText": "Faça o passeio",
-    "welcomeMessage": "Interessado em descoberta e exploração de dados? <br/> Mergulhe de cabeça e comece ou verifique as seguintes opções do guia de ajuda.",
+    "welcomeMessage": "O Estatísticas do Espaço visa desenvolver e implementar um sistema robusto para estatísticas da produção agrícola em Moçambique. O eventual utilizador previsto é o Ministério da Agricultura e Desenvolvimento Rural (MADER). Atualmente, o nosso projeto piloto de segundo ano envolve três províncias: Gaza, Manica e Zambézia. Atualmente, o trabalho de campo está a ser realizado na província de Manica, a primeira que abordamos. Originalmente, estávamos programados para começar na província de Gaza, mais a sul, mas as cheias impediram a realização do trabalho. Devido ao trabalho de campo em curso, estamos felizes por ver os dados a chegar e acompanhar o progresso. O projeto é uma colaboração entre o IFPRI (Washington, DC), UT/ITC (GIP, NRS), a Universidade Eduardo Mondlane (Maputo, Moçambique) e a Universidade Nacional de Seul (Coreia do Sul). O financiamento provém do Ministério da Agricultura, Alimentação e Assuntos Rurais da Coreia do Sul (MAFRA).",
     "exploreDataBtnText": "Explorar dados",
-    "welcomeMessageOnMobile": "Interessado em descoberta e exploração de dados?",
+    "welcomeMessageOnMobile": "O Estatísticas do Espaço visa desenvolver e implementar um sistema robusto para estatísticas da produção agrícola em Moçambique. O eventual utilizador previsto é o Ministério da Agricultura e Desenvolvimento Rural (MADER). Atualmente, o nosso projeto piloto do segundo ano envolve três províncias: Gaza, Manica e Zambézia. Atualmente, o trabalho de campo está a ser realizado na província de Manica, a primeira que estamos a abordar. Originalmente, estávamos programados para começar na província de Gaza, mais a sul, mas as cheias impediram a realização do trabalho. Devido ao trabalho de campo em curso, estamos felizes por ver os dados a chegar e acompanhar o progresso.",
     "searchBtnText": "Procure um local",
     "dismissText": "Feche a mensagem e não me mostre novamente"
   },
@@ -560,7 +560,12 @@
     "addItemErrorMessage": "Ocorreu um erro ao carregar o item do catálogo.",
     "searchItem": "Procurar",
     "searchItemTitle": "Procurar",
-    "splitScreenMode": "MODO DE TELA DIVIDIDA"
+    "splitScreenMode": "MODO DE TELA DIVIDIDA",
+    "tabs": {
+      "mapHeading": "Mapa",
+      "chartHeading": "Gráfico",
+      "tableHeading": "Mesa"
+    }
   },
   "dateTime": {
     "useTimeline": "Use a linha do tempo",
@@ -624,6 +629,13 @@
     "shareExplanation": "Qualquer pessoa com este URL poderá acessar este mapa.",
     "unsuccessful": "Falha ao copiar ...",
     "copy": "Copiar"
+  },
+  "emptyWorkbench": {
+    "helpfulHintsThree": "No painel você pode ativar e desativar os conjuntos de dados, alterar opacidade, ativar a comparação em tela dividida, alterar estilos e navegar por datas e horas, se os dados suportarem essa funcionalidade.",
+    "helpfulHintsOne": "Navegue pelos dados disponíveis selecionando 'Explorar dados' ou clique em 'Carregar' para adicionar seus próprios dados ao mapa.",
+    "helpfulHintsTwo": "Após adicionar dados ao mapa, seus conjuntos de dados ativos são listados aqui em seu painel. O painel o ajudará a interagir com os dados.",
+    "emptyArea": "Seu painel está vazio",
+    "helpfulHints": "Dicas úteis"
   },
   "catalogItem": {
     "removeFromMap": "Remover do mapa",
@@ -763,6 +775,7 @@
   "loader": {
     "loadingMessage": "Carregando"
   },
+  "emptyWorkbenchMessage": "<0> <0> Seu painel está vazio </0> <1> <strong> Clique em '$t(addData.addDataBtnText)' acima para </strong> </1> <2> <0> Navegar no Catálogo </0> <1> Carregue seus próprios dados no mapa </1> </2> <3> <0> </0> <strong> DICA. </strong> <2> Todos os seus conjuntos ativos serão listados aqui < / 2> </3> </0>",
   "dataCatalog": {
     "groupRemove": "remover este grupo",
     "groupEmpty": "Este grupo está vazio"
@@ -1297,11 +1310,518 @@
       "bulkGeocoderInfoMessage": "O CSV contém endereços, mas {{number}} não pode ser localizado no mapa: ",
       "bulkGeocoderInfo2Message": "{{nullAddresses}} endereços estão faltando no CSV.",
       "bulkGeocoderErrorTitle": "Erro do Geocoder em massa",
+      "activeStyle": "Variável de exibição",
+      "editStyle": "Editar estilo",
       "legendNullLabel": "(Sem valor)",
       "styleDisabledLabel": "Desativar estilo",
       "zFilterEnabled": "Valores extremos ocultos (clique para mostrar)",
       "zFilterDisabled": "Valores extremos detectados (clique para ocultar)",
-      "timeDimensionEnabled": "Tempo habilitado (clique para desabilitar)"
+      "timeDimensionEnabled": "Tempo habilitado (clique para desabilitar)",
+      "regionMapping": "Mapeamento de região",
+      "regionColumn": "Coluna Região",
+      "manualRegionMapping": "Mapeamento manual de região",
+      "custom": "Personalizada"
+    },
+    "tableStyling": {
+      "hideAdvancedOptions": "Ocultar opções avançadas",
+      "showAdvancedOptions": "Mostrar opções avançadas",
+      "copyUserStratum": "Copiar estrato do usuário para a área de transferência",
+      "name": "Estilo",
+      "reset": "Redefinir para o estilo padrão",
+      "data": {
+        "name": "Data",
+        "selectableDimensions": {
+          "dataset": {
+            "name": "Conjunto de dados"
+          },
+          "tableStyle": {
+            "name": "Estilo"
+          },
+          "tableStyleType": {
+            "name": "Simbologia",
+            "options": {
+              "fill": {
+                "name": "Cor de preenchimento"
+              },
+              "pointSize": {
+                "name": "Tamanho do ponto"
+              },
+              "point": {
+                "name": "Estilo de ponto/marcador"
+              },
+              "outline": {
+                "name": "Cor do contorno"
+              },
+              "label": {
+                "name": "Estilo de etiqueta"
+              },
+              "trail": {
+                "name": "Trail style"
+              }
+            }
+          }
+        }
+      },
+      "fill": {
+        "name": "Cor de preenchimento",
+        "selectableDimensions": {
+          "tableColorColumn": {
+            "name": "Variável"
+          },
+          "dataType": {
+            "name": "Tipo de coluna (avançado)"
+          },
+          "type": {
+            "name": "Type",
+            "undefinedLabel": "Please specify",
+            "options": {
+              "noStyle": {
+                "name": "No style"
+              },
+              "sequentialContinuous": {
+                "name": "Sequential (continuous)"
+              },
+              "sequentialDiscrete": {
+                "name": "Sequential (discrete)"
+              },
+              "divergingContinuous": {
+                "name": "Divergent (continuous)"
+              },
+              "divergingDiscrete": {
+                "name": "Divergent (discrete)"
+              },
+              "qualitative": {
+                "name": "Qualitative"
+              },
+              "customQualitative": {
+                "name": "Custom (qualitative)"
+              },
+              "customDiscrete": {
+                "name": "Custom (discrete)"
+              }
+            }
+          },
+          "scheme": {
+            "name": "Scheme"
+          },
+          "numberOfBins": {
+            "name": "Number of Bins"
+          }
+        }
+      },
+      "min": {
+        "name": "Min"
+      },
+      "displayRange": {
+        "name": "Faixa de exibição",
+        "selectableDimensions": {
+          "max": {
+            "name": "Max"
+          }
+        }
+      },
+      "bins": {
+        "name": "Bins",
+        "selectableDimensions": {
+          "start": {
+            "name": "{{value1}} to {{value2}}",
+            "selectableDimensions": {
+              "color": {
+                "name": "Color"
+              },
+              "start": {
+                "name": "Start"
+              },
+              "stop": {
+                "name": "Stop"
+              }
+            }
+          }
+        }
+      },
+      "colors": {
+        "name": "Colors",
+        "selectableDimensions": {
+          "color": {
+            "name": "Color"
+          },
+          "value": {
+            "name": "Value"
+          },
+          "remove": {
+            "value": "Remove"
+          },
+          "add": {
+            "value": "Add Color"
+          }
+        }
+      },
+      "nullColor": {
+        "name": "Default color"
+      },
+      "outlierColor": {
+        "name": "Outlier color"
+      },
+      "additionalColors": {
+        "name": "Cores adicionais",
+        "selectableDimensions": {
+          "regionColor": {
+            "name": "Region color"
+          },
+          "nullColor": {
+            "name": "Default color"
+          },
+          "outlierColor": {
+            "name": "Outlier color"
+          }
+        }
+      },
+      "pointSize": {
+        "name": "Point size",
+        "selectableDimensions": {
+          "pointSizeColumn": {
+            "name": "Variable"
+          },
+          "pointSizeNull": {
+            "name": "Default size"
+          },
+          "pointSizesFactor": {
+            "name": "Size factor"
+          },
+          "pointSizeOffset": {
+            "name": "Size offset"
+          }
+        }
+      },
+      "regionMapping": {
+        "name": "Mapeamento de região"
+      },
+      "legend": {
+        "name": "Lenda",
+        "selectableDimensions": {
+          "legendTitle": {
+            "name": "Title"
+          },
+          "legendTicks": {
+            "name": "Ticks"
+          },
+          "title": {
+            "name": "Item {{index}} Title"
+          }
+        }
+      },
+      "styleOptions": {
+        "name": "Opções de estilo",
+        "selectableDimensions": {
+          "styleTitle": {
+            "name": "Title"
+          },
+          "longitudeColumn": {
+            "name": "Longitude column"
+          },
+          "latitudeColumn": {
+            "name": "Latitude column"
+          }
+        }
+      },
+      "timeOptions": {
+        "name": "Opções de horário",
+        "selectableDimensions": {
+          "tableTimeColumn": {
+            "name": "Time column"
+          },
+          "tableEndTimeColumn": {
+            "name": "End time column"
+          },
+          "tableTimeIdColumns": {
+            "name": "ID columns"
+          },
+          "tableTimeIsSampled": {
+            "name": "Is Sampled",
+            "options": {
+              "true": {
+                "name": "Yes"
+              },
+              "false": {
+                "name": "No"
+              }
+            }
+          },
+          "tableTimeDisplayDuration": {
+            "name": "Display Duration"
+          },
+          "tableTimeSpreadStartTime": {
+            "name": "Spread start time",
+            "options": {
+              "true": {
+                "name": "Yes"
+              },
+              "false": {
+                "name": "No"
+              }
+            }
+          },
+          "tableTimeSpreadFinishTime": {
+            "name": "Spread finish time",
+            "options": {
+              "true": {
+                "name": "Yes"
+              },
+              "false": {
+                "name": "No"
+              }
+            }
+          }
+        }
+      },
+      "workbenchOptions": {
+        "name": "Opções de bancada",
+        "selectableDimensions": {
+          "tableStyleEnalbed": {
+            "name": "Show style in Workbench",
+            "options": {
+              "true": {
+                "name": "Style showing"
+              },
+              "false": {
+                "name": "Style hidden"
+              }
+            }
+          },
+          "showDisableStyleOption": {
+            "name": "Show disable style option"
+          },
+          "showDisableTimeOption": {
+            "name": "Show disable time option"
+          },
+          "enableManualRegionMapping": {
+            "name": "Enable manual region mapping"
+          }
+        }
+      },
+      "variableAndColumn": {
+        "name": "Variável/coluna",
+        "selectableDimensions": {
+          "columnTitle": {
+            "name": "Title"
+          },
+          "columnUnits": {
+            "name": "Units"
+          }
+        }
+      },
+      "style": {
+        "selectableDimensions": {
+          "column": {
+            "name": "Variable"
+          },
+          "styleType": {
+            "name": "Type",
+            "undefinedLabel": "Please specify",
+            "constant": {
+              "name": "No style"
+            },
+            "bin": {
+              "name": "Discrete"
+            },
+            "enum": {
+              "name": "Qualitative"
+            }
+          },
+          "enum": {
+            "name": "Enum styles",
+            "selectableDimensions": {
+              "enum": {
+                "noValue": "No value",
+                "selectableDimensions": {
+                  "value": {
+                    "name": "Value"
+                  },
+                  "remove": {
+                    "value": "Remove"
+                  }
+                },
+                "add": {
+                  "value": "Add style for value"
+                }
+              }
+            }
+          },
+          "bin": {
+            "name": "Bin styles",
+            "selectableDimensions": {
+              "add": {
+                "value": "Add style bin"
+              },
+              "bin": {
+                "noValue": "No value",
+                "range": "{{value1}} to {{value2}}",
+                "selectableDimensions": {
+                  "start": {
+                    "name": "Start"
+                  },
+                  "stop": {
+                    "name": "Stop"
+                  },
+                  "remove": {
+                    "value": "Remove"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "null": {
+          "name": "Default"
+        }
+      },
+      "point": {
+        "name": "Marker style",
+        "selectableDimensions": {
+          "marker": {
+            "name": "Marker",
+            "tooltip": "Marker supports URL and base64 of any supported image format (eg PNG, SVG)"
+          },
+          "rotation": {
+            "name": "Rotation"
+          },
+          "height": {
+            "name": "Height"
+          },
+          "width": {
+            "name": "Width"
+          }
+        }
+      },
+      "outline": {
+        "name": "Outline style",
+        "selectableDimensions": {
+          "color": {
+            "name": "Color"
+          },
+          "width": {
+            "name": "Width"
+          }
+        }
+      },
+      "label": {
+        "name": "Label style",
+        "selectableDimensions": {
+          "column": {
+            "name": "Label column"
+          },
+          "font": {
+            "name": "Font"
+          },
+          "style": {
+            "name": "Label style",
+            "options": {
+              "fill": {
+                "name": "Fill only"
+              },
+              "outline": {
+                "name": "Outline only"
+              },
+              "fillAndOutline": {
+                "name": "Fill and outline"
+              }
+            }
+          },
+          "scale": {
+            "name": "Scale"
+          },
+          "fillColor": {
+            "name": "Fill color"
+          },
+          "outlineColor": {
+            "name": "Outline color"
+          },
+          "outlineWidth": {
+            "name": "Outline width"
+          },
+          "horizontalOrigin": {
+            "name": "Horizontal origin",
+            "options": {
+              "left": {
+                "name": "Left"
+              },
+              "center": {
+                "name": "Center"
+              },
+              "right": {
+                "name": "Right"
+              }
+            }
+          },
+          "verticalOrigin": {
+            "name": "Vertical origin",
+            "options": {
+              "top": {
+                "name": "Top"
+              },
+              "center": {
+                "name": "Center"
+              },
+              "baseline": {
+                "name": "Baseline"
+              },
+              "bottom": {
+                "name": "Bottom"
+              }
+            }
+          },
+          "offsetX": {
+            "name": "Pixel offset X"
+          },
+          "offsetY": {
+            "name": "Pixel offset Y"
+          }
+        }
+      },
+      "trail": {
+        "selectableDimensions": {
+          "leadTime": {
+            "name": "Lead time (secs)"
+          },
+          "trailTime": {
+            "name": "Trail time (secs)"
+          },
+          "width": {
+            "name": "Width"
+          },
+          "resolution": {
+            "name": "Resolution"
+          },
+          "growColor": {
+            "name": "Glow color"
+          },
+          "growPower": {
+            "name": "Glow power"
+          },
+          "taperPower": {
+            "name": "Taper power"
+          },
+          "solidColor": {
+            "name": "Solid color"
+          },
+          "trailStyleOptions": {
+            "name": "Trail style options",
+            "selectableDimensions": {
+              "material": {
+                "name": "Material type",
+                "options": {
+                  "solidColor": {
+                    "name": "Solid color"
+                  },
+                  "polylineGlow": {
+                    "name": "Polyline glow"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "terriaJSONcatalog": {
       "serviceResponseErrorTitle": "A resposta do serviço não é uma string JSON",
