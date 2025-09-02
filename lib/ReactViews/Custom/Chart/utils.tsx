@@ -165,32 +165,34 @@ interface YAxisProps {
   label?: string;
 }
 
-export const YAxis = memo(({ scale, color, units, offset }: YAxisProps) => {
-  return (
-    <AxisLeft
-      key={`y-axis-${units}`}
-      left={offset}
-      scale={scale}
-      numTicks={Y_AXIS_NUM_TICKS}
-      stroke={color}
-      tickStroke={color}
-      label={units || ""}
-      labelOffset={10}
-      labelProps={{
-        fill: color,
-        textAnchor: "middle",
-        fontSize: 12,
-        fontFamily: "Arial"
-      }}
-      tickLabelProps={() => ({
-        fill: color,
-        textAnchor: "end",
-        fontSize: Y_AXIS_TICK_LABEL_FONT_SIZE,
-        fontFamily: "Arial"
-      })}
-    />
-  );
-});
+export const YAxis = memo(
+  ({ scale, color, units, label, offset }: YAxisProps) => {
+    return (
+      <AxisLeft
+        key={`y-axis-${units}`}
+        left={offset}
+        scale={scale}
+        numTicks={Y_AXIS_NUM_TICKS}
+        stroke={color}
+        tickStroke={color}
+        label={label || units || ""}
+        labelOffset={10}
+        labelProps={{
+          fill: color,
+          textAnchor: "middle",
+          fontSize: 12,
+          fontFamily: "Arial"
+        }}
+        tickLabelProps={() => ({
+          fill: color,
+          textAnchor: "end",
+          fontSize: Y_AXIS_TICK_LABEL_FONT_SIZE,
+          fontFamily: "Arial"
+        })}
+      />
+    );
+  }
+);
 YAxis.displayName = "YAxis";
 
 interface CursorProps extends ComponentPropsWithoutRef<typeof Line> {
