@@ -3,6 +3,7 @@ import React from "react";
 import { observer } from "mobx-react";
 import { Bar } from "@visx/shape";
 import { scaleBand, scaleLinear } from "@visx/scale";
+import getChartColorForId from "../../../Charts/getChartColorForId";
 
 @observer
 class BarChart extends React.PureComponent {
@@ -70,7 +71,9 @@ class BarChart extends React.PureComponent {
             x={xScale(d.x)}
             width={xScale.bandwidth()}
             height={height - this.margin.top - this.margin.bottom - yScale(d.y)}
-            fill={fillcolors ? fillcolors[idx] : fill}
+            fill={
+              fillcolors ? fillcolors[idx] : getChartColorForId("bar-" + idx)
+            }
             stroke="white"
             strokeWidth={1}
           />
