@@ -24,13 +24,7 @@ class BarChart extends React.PureComponent {
   componentDidMount() {}
 
   doZoom(scales) {
-    const el = document.querySelector(`#${this.props.id} bar`);
-    if (!el) return;
-    const { chartItem, width, height } = this.props;
-    // const path = line()
-    //   .x((p) => scales.x(p.x))
-    //   .y((p) => scales.y(p.y));
-    // el.setAttribute("d", path(chartItem.points));
+    // Bar chart does not support zooming
   }
 
   render() {
