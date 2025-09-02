@@ -33,9 +33,11 @@ interface BottomDockChartProps extends WithParentSizeProvidedProps {
   chartItems: readonly ChartItem[];
   xAxis: ChartAxis;
   height: number;
-
   width?: number;
   margin?: Margin;
+  title?: string;
+  xAxisLabel?: string;
+  yAxisLabel?: string;
 }
 
 const _BottomDockChart: React.FC<BottomDockChartProps> = observer(
@@ -47,6 +49,9 @@ const _BottomDockChart: React.FC<BottomDockChartProps> = observer(
         height={height}
         margin={margin}
         width={Math.max(CHART_MIN_WIDTH, width || parentWidth)}
+        xAxisLabel={xAxisLabel}
+        yAxisLabel={yAxisLabel}
+        title={title}
       />
     );
   }
@@ -63,6 +68,9 @@ interface ChartProps {
   width: number;
   height: number;
   margin?: Margin;
+  title?: string;
+  xAxisLabel?: string;
+  yAxisLabel?: string;
 }
 
 const Chart: React.FC<ChartProps> = observer(
@@ -71,6 +79,9 @@ const Chart: React.FC<ChartProps> = observer(
     xAxis,
     width,
     height,
+    title,
+    xAxisLabel,
+    yAxisLabel,
     margin = DEFAULT_MARGIN
   }) => {
     const [zoomedXScale, setZoomedXScale] = useState<XScale | undefined>(
@@ -217,6 +228,9 @@ const Chart: React.FC<ChartProps> = observer(
 
     if (processedChartItems.length === 0)
       return <div className={Styles.empty}>No data available</div>;
+    const chartXLabel =
+      xAxisLabel ??
+      (xAxis.units || (xAxis.scale === "time" ? "Date" : xAxis.name));
 
     return (
       <ZoomX
@@ -243,17 +257,14 @@ const Chart: React.FC<ChartProps> = observer(
                 width={plotWidth}
                 height={plotHeight}
               />
-              <XAxis
-                top={plotHeight + 1}
-                scale={xScale}
-                label={xAxis.units || (xAxis.scale === "time" ? "Date" : "")}
-              />
+              <XAxis top={plotHeight + 1} scale={xScale} label={chartXLabel} />
               {yAxes.map((y, i) => (
                 <YAxis
                   {...y}
                   key={`y-axis-${y.units}`}
                   color={yAxes.length > 1 ? y.color : DEFAULT_GRID_COLOR}
                   offset={i * 50}
+                  label={yAxisLabel ?? y.units}
                 />
               ))}
               {yAxes.map((y) => (

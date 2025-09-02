@@ -149,6 +149,7 @@ interface YAxisProps {
   color: string;
   units?: string;
   offset: number;
+  label?: string;
 }
 
 export const YAxis = memo(({ scale, color, units, offset }: YAxisProps) => {
