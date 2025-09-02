@@ -87,9 +87,9 @@ const CatalogGroup = observer((props) => {
           {!props.topLevel && (
             <span className={Styles.folder}>
               {props.open ? (
-                <Icon glyph={Icon.GLYPHS.folderOpen} />
-              ) : (
                 <Icon glyph={Icon.GLYPHS.folder} />
+              ) : (
+                <Icon glyph={Icon.GLYPHS.folderOpen} />
               )}
             </span>
           )}
@@ -103,9 +103,9 @@ const CatalogGroup = observer((props) => {
                 })}
               >
                 {props.open ? (
-                  <Icon glyph={Icon.GLYPHS.opened} />
-                ) : (
                   <Icon glyph={Icon.GLYPHS.closed} />
+                ) : (
+                  <Icon glyph={Icon.GLYPHS.opened} />
                 )}
               </span>
               {/* This next button is for user added data, and perhaps should be called 'trashable' instead of 'removable' */}

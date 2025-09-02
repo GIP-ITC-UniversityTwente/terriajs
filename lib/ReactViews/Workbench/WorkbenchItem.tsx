@@ -138,13 +138,13 @@ const WorkbenchItemRaw: React.FC<IProps> = observer((props) => {
                   <StyledIcon
                     styledHeight={"8px"}
                     light
-                    glyph={Icon.GLYPHS.opened}
+                    glyph={Icon.GLYPHS.closed}
                   />
                 ) : (
                   <StyledIcon
                     styledHeight={"8px"}
                     light
-                    glyph={Icon.GLYPHS.closed}
+                    glyph={Icon.GLYPHS.opened}
                   />
                 )}
               </BoxSpan>
