@@ -11,10 +11,12 @@ interface Props {
   chartItem: ChartItem;
   scales: Scales;
   color?: string;
+  width?: number;
+  height?: number;
 }
 
 const _LineChart = forwardRef<ChartZoomHandle, Props>(
-  ({ id, chartItem, scales, color }, ref) => {
+  ({ id, chartItem, scales, color, width, height }, ref) => {
     useImperativeHandle(
       ref,
       () => ({
@@ -39,8 +41,9 @@ const _LineChart = forwardRef<ChartZoomHandle, Props>(
     const stroke = color || chartItem.getColor();
 
     return (
-      <g id={id}>
+      <g id={id} width={width} height={height}>
         <LinePath
+          width={width}
           data={chartItem.points}
           x={(p) =>
             scales.x(

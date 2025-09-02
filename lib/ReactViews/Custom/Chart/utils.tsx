@@ -18,10 +18,12 @@ interface PlotProps {
   chartItems: readonly ChartItem[];
   initialScales: readonly { x: XScale; y: YScale }[];
   zoomedScales: readonly { x: XScale; y: YScale }[];
+  width: number;
+  height: number;
 }
 
 export const Plot = memo(
-  ({ chartItems, initialScales, zoomedScales }: PlotProps) => {
+  ({ chartItems, initialScales, zoomedScales, width, height }: PlotProps) => {
     const chartRefs = useRef<{ id: string; zoomHandle: ChartZoomHandle }[]>([]);
 
     useEffect(() => {

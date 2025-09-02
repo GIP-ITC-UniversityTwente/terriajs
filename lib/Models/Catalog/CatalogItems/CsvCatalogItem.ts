@@ -141,8 +141,6 @@ export default class CsvCatalogItem
       return;
     }
 
-    console.log(this.polling.url, this._apiUrl, this.refreshUrl);
-
     Csv.parseUrl(
       proxyCatalogItemUrl(this, this.refreshUrl),
       true,

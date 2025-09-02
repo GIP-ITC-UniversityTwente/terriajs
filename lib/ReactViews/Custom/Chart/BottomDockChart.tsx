@@ -282,6 +282,8 @@ const Chart: React.FC<ChartProps> = observer(
                   chartItems={processedChartItems}
                   initialScales={initialScales}
                   zoomedScales={zoomedScales}
+                  width={plotWidth}
+                  height={plotHeight}
                 />
               </svg>
             </Group>
