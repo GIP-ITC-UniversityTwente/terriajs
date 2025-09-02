@@ -264,6 +264,7 @@ const Chart: FC<ChartPropsType> = observer(
             scales={scales}
             width={plot.width}
             height={plot.height}
+            label={chartLabel}
           />
         </Group>
       </svg>
@@ -280,6 +281,7 @@ interface PlotPropsType {
   chartItem: any;
   baseColor?: string;
   scales: any;
+  label?: string;
 }
 
 @observer
