@@ -41,7 +41,17 @@ interface BottomDockChartProps extends WithParentSizeProvidedProps {
 }
 
 const _BottomDockChart: React.FC<BottomDockChartProps> = observer(
-  ({ chartItems, xAxis, parentWidth = 0, width, height, margin }) => {
+  ({
+    chartItems,
+    xAxis,
+    parentWidth = 0,
+    width,
+    height,
+    margin,
+    yAxisLabel,
+    xAxisLabel,
+    title
+  }) => {
     return (
       <Chart
         chartItems={chartItems}
