@@ -435,7 +435,7 @@
     "promptMessage": "Encontre o Tour, vídeos de como fazer e outros conteúdos de ajuda aqui",
     "dismissText": "Entendi, obrigado!",
     "mapUserGuide": "Guia do usuário do mapa",
-    "menuPaneBody": "Encontre dicas úteis sobre como usar TerriaJS verificando os guias abaixo ou entrando em contato com a equipe em [{{supportEmail}}] ({{supportEmail}})"
+    "menuPaneBody": "Encontre dicas úteis sobre como usar Estatísticas do Espaço verificando os guias abaixo ou entrando em contato com a equipe em [{{supportEmail}}] ({{supportEmail}})"
   },
   "helpMenu": {
     "done": "FEITO",
